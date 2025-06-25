@@ -1,0 +1,570 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		E45090932DFF0ACD001B6DEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E450907D2DFF0ACB001B6DEC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E45090842DFF0ACB001B6DEC;
+			remoteInfo = FPLyze;
+		};
+		E450909D2DFF0ACD001B6DEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E450907D2DFF0ACB001B6DEC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E45090842DFF0ACB001B6DEC;
+			remoteInfo = FPLyze;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E45090852DFF0ACB001B6DEC /* FPLyze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FPLyze.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E45090922DFF0ACD001B6DEC /* FPLyzeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FPLyzeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E450909C2DFF0ACD001B6DEC /* FPLyzeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FPLyzeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E4427FFE2E074E4800997924 /* Exceptions for "FPLyze" folder in "FPLyze" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E45090842DFF0ACB001B6DEC /* FPLyze */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E45090872DFF0ACB001B6DEC /* FPLyze */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E4427FFE2E074E4800997924 /* Exceptions for "FPLyze" folder in "FPLyze" target */,
+			);
+			path = FPLyze;
+			sourceTree = "<group>";
+		};
+		E45090952DFF0ACD001B6DEC /* FPLyzeTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FPLyzeTests;
+			sourceTree = "<group>";
+		};
+		E450909F2DFF0ACD001B6DEC /* FPLyzeUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FPLyzeUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E45090822DFF0ACB001B6DEC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E450908F2DFF0ACD001B6DEC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E45090992DFF0ACD001B6DEC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E450907C2DFF0ACB001B6DEC = {
+			isa = PBXGroup;
+			children = (
+				E45090872DFF0ACB001B6DEC /* FPLyze */,
+				E45090952DFF0ACD001B6DEC /* FPLyzeTests */,
+				E450909F2DFF0ACD001B6DEC /* FPLyzeUITests */,
+				E45090862DFF0ACB001B6DEC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E45090862DFF0ACB001B6DEC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E45090852DFF0ACB001B6DEC /* FPLyze.app */,
+				E45090922DFF0ACD001B6DEC /* FPLyzeTests.xctest */,
+				E450909C2DFF0ACD001B6DEC /* FPLyzeUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E45090842DFF0ACB001B6DEC /* FPLyze */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E45090A62DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyze" */;
+			buildPhases = (
+				E45090812DFF0ACB001B6DEC /* Sources */,
+				E45090822DFF0ACB001B6DEC /* Frameworks */,
+				E45090832DFF0ACB001B6DEC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E45090872DFF0ACB001B6DEC /* FPLyze */,
+			);
+			name = FPLyze;
+			packageProductDependencies = (
+			);
+			productName = FPLyze;
+			productReference = E45090852DFF0ACB001B6DEC /* FPLyze.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E45090912DFF0ACD001B6DEC /* FPLyzeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E45090A92DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyzeTests" */;
+			buildPhases = (
+				E450908E2DFF0ACD001B6DEC /* Sources */,
+				E450908F2DFF0ACD001B6DEC /* Frameworks */,
+				E45090902DFF0ACD001B6DEC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E45090942DFF0ACD001B6DEC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E45090952DFF0ACD001B6DEC /* FPLyzeTests */,
+			);
+			name = FPLyzeTests;
+			packageProductDependencies = (
+			);
+			productName = FPLyzeTests;
+			productReference = E45090922DFF0ACD001B6DEC /* FPLyzeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E450909B2DFF0ACD001B6DEC /* FPLyzeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E45090AC2DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyzeUITests" */;
+			buildPhases = (
+				E45090982DFF0ACD001B6DEC /* Sources */,
+				E45090992DFF0ACD001B6DEC /* Frameworks */,
+				E450909A2DFF0ACD001B6DEC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E450909E2DFF0ACD001B6DEC /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E450909F2DFF0ACD001B6DEC /* FPLyzeUITests */,
+			);
+			name = FPLyzeUITests;
+			packageProductDependencies = (
+			);
+			productName = FPLyzeUITests;
+			productReference = E450909C2DFF0ACD001B6DEC /* FPLyzeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E450907D2DFF0ACB001B6DEC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					E45090842DFF0ACB001B6DEC = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					E45090912DFF0ACD001B6DEC = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = E45090842DFF0ACB001B6DEC;
+					};
+					E450909B2DFF0ACD001B6DEC = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = E45090842DFF0ACB001B6DEC;
+					};
+				};
+			};
+			buildConfigurationList = E45090802DFF0ACB001B6DEC /* Build configuration list for PBXProject "FPLyze" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E450907C2DFF0ACB001B6DEC;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E45090862DFF0ACB001B6DEC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E45090842DFF0ACB001B6DEC /* FPLyze */,
+				E45090912DFF0ACD001B6DEC /* FPLyzeTests */,
+				E450909B2DFF0ACD001B6DEC /* FPLyzeUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E45090832DFF0ACB001B6DEC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E45090902DFF0ACD001B6DEC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E450909A2DFF0ACD001B6DEC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E45090812DFF0ACB001B6DEC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E450908E2DFF0ACD001B6DEC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E45090982DFF0ACD001B6DEC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E45090942DFF0ACD001B6DEC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E45090842DFF0ACB001B6DEC /* FPLyze */;
+			targetProxy = E45090932DFF0ACD001B6DEC /* PBXContainerItemProxy */;
+		};
+		E450909E2DFF0ACD001B6DEC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E45090842DFF0ACB001B6DEC /* FPLyze */;
+			targetProxy = E450909D2DFF0ACD001B6DEC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E45090A42DFF0ACD001B6DEC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E45090A52DFF0ACD001B6DEC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E45090A72DFF0ACD001B6DEC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FPLyze/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = egi.FPLyze;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E45090A82DFF0ACD001B6DEC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FPLyze/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = egi.FPLyze;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E45090AA2DFF0ACD001B6DEC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = egi.FPLyzeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FPLyze.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FPLyze";
+			};
+			name = Debug;
+		};
+		E45090AB2DFF0ACD001B6DEC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = egi.FPLyzeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FPLyze.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FPLyze";
+			};
+			name = Release;
+		};
+		E45090AD2DFF0ACD001B6DEC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = egi.FPLyzeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FPLyze;
+			};
+			name = Debug;
+		};
+		E45090AE2DFF0ACD001B6DEC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = egi.FPLyzeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FPLyze;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E45090802DFF0ACB001B6DEC /* Build configuration list for PBXProject "FPLyze" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E45090A42DFF0ACD001B6DEC /* Debug */,
+				E45090A52DFF0ACD001B6DEC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E45090A62DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyze" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E45090A72DFF0ACD001B6DEC /* Debug */,
+				E45090A82DFF0ACD001B6DEC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E45090A92DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyzeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E45090AA2DFF0ACD001B6DEC /* Debug */,
+				E45090AB2DFF0ACD001B6DEC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E45090AC2DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyzeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E45090AD2DFF0ACD001B6DEC /* Debug */,
+				E45090AE2DFF0ACD001B6DEC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E450907D2DFF0ACB001B6DEC /* Project object */;
+}
