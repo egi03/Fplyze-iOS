@@ -11,7 +11,9 @@ import SwiftUI
 struct FPLyzeApp: App {
     var body: some Scene {
         WindowGroup {
-            LeagueStatisticsView(leagueId: 117)
+            HomeView()
         }
     }
 }
+
+// 788680
