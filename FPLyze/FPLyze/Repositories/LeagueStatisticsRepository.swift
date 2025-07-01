@@ -3,49 +3,59 @@
 //  FPLyze
 //
 //  Created by Eugen Sedlar on 20.06.2025..
-//
 
 import Foundation
+import Combine
 
 @MainActor
 class LeagueStatisticsRepository: ObservableObject {
     private let apiService = FPLAPIService.shared
+    private let cache = CacheManager.shared
+    private let playerAnalysisService = PlayerAnalysisService()
     
+    @Published var loadingProgress: Double = 0.0
+    @Published var loadingMessage: String = ""
     
+    // Settings for performance
+    private let batchSize = 10 // Process members in batches
+    private let maxConcurrentRequests = 5 // Limit concurrent API calls
     
-    func fetchLeagueStatistics(leagueId: Int) async throws -> LeagueStatisticsData {
-        let members = try await fetchAllMembers(leagueId: leagueId)
-        
-        
-        let detailedMembers = try await withThrowingTaskGroup(of: LeagueMember?.self)
-        { group in
-            for member in members.prefix(50) {
-                group.addTask {
-                    try? await self.fetchMemberDetails(member)
-                }
-            }
-            
-            var results: [LeagueMember] = []
-            for try await member in group {
-                if let member = member {
-                    results.append(member)
-                }
-            }
-            return results
+    func fetchLeagueStatistics(leagueId: Int, forceRefresh: Bool = false) async throws -> LeagueStatisticsData {
+        // Check cache first
+        if !forceRefresh, let cached = await cache.getCachedLeague(leagueId) {
+            return cached
         }
         
+        loadingProgress = 0.0
+        loadingMessage = "Fetching league members..."
         
-        let records = calculateRecords(from: detailedMembers)
-        let managerStats = calculateManagerStatistics(from: detailedMembers)
-        let h2hRecords = calculateHeadToHeadRecords(from: detailedMembers)
+        let members = try await fetchAllMembers(leagueId: leagueId)
         
-        return LeagueStatisticsData(
+        loadingMessage = "Loading detailed statistics..."
+        let detailedMembers = try await fetchMembersInBatches(members)
+        
+        loadingMessage = "Calculating statistics..."
+        loadingProgress = 0.9
+        
+        // Perform player analysis
+        loadingMessage = "Analyzing player performance..."
+        let (missedAnalyses, underperformerAnalyses) = try await playerAnalysisService.analyzeLeague(detailedMembers)
+        
+        let statistics = LeagueStatisticsData(
             leagueId: leagueId,
-            records: records,
-            managerStatistics: managerStats,
-            headToHeadStatistics: h2hRecords,
-            members: detailedMembers
+            records: calculateRecords(from: detailedMembers),
+            managerStatistics: calculateManagerStatistics(from: detailedMembers),
+            headToHeadStatistics: calculateHeadToHeadRecords(from: detailedMembers),
+            members: detailedMembers,
+            missedPlayerAnalyses: missedAnalyses,
+            underperformerAnalyses: underperformerAnalyses
         )
+        
+        // Cache the results
+        await cache.cacheLeague(leagueId, data: statistics)
+        
+        loadingProgress = 1.0
+        return statistics
     }
     
     private func fetchAllMembers(leagueId: Int) async throws -> [LeagueMember] {
@@ -75,9 +85,47 @@ class LeagueStatisticsRepository: ObservableObject {
             allMembers.append(contentsOf: members)
             hasMore = response.standings.hasNext
             page += 1
+            
+            // Update progress
+            loadingProgress = min(0.3, Double(allMembers.count) / 100.0 * 0.3)
         }
         
         return allMembers
+    }
+    
+    private func fetchMembersInBatches(_ members: [LeagueMember]) async throws -> [LeagueMember] {
+        var detailedMembers: [LeagueMember] = []
+        let totalMembers = min(members.count, 50) // Limit to top 50 for performance
+        
+        for batchStart in stride(from: 0, to: totalMembers, by: batchSize) {
+            let batchEnd = min(batchStart + batchSize, totalMembers)
+            let batch = Array(members[batchStart..<batchEnd])
+            
+            let batchResults = try await withThrowingTaskGroup(of: LeagueMember?.self) { group in
+                for member in batch {
+                    group.addTask {
+                        try? await self.fetchMemberDetails(member)
+                    }
+                }
+                
+                var results: [LeagueMember] = []
+                for try await member in group {
+                    if let member = member {
+                        results.append(member)
+                    }
+                }
+                return results
+            }
+            
+            detailedMembers.append(contentsOf: batchResults)
+            
+            // Update progress
+            let baseProgress = 0.3
+            let detailProgress = 0.6 * (Double(detailedMembers.count) / Double(totalMembers))
+            loadingProgress = baseProgress + detailProgress
+        }
+        
+        return detailedMembers
     }
     
     private func fetchMemberDetails(_ member: LeagueMember) async throws -> LeagueMember {
@@ -100,15 +148,19 @@ class LeagueStatisticsRepository: ObservableObject {
             )
         }
         
+        // Process chips with better performance data
         updatedMember.chips = history.chips.map { chip in
-            let points = updatedMember.gameweekHistory
-                .first { $0.event == chip.event }?.points ?? 0
+            let chipGameweek = updatedMember.gameweekHistory
+                .first { $0.event == chip.event }
+            
+            let points = chipGameweek?.points ?? 0
+            let benchBoost = chip.name == "bboost" ? chipGameweek?.benchPoints : nil
             
             return ChipUsage(
                 name: chip.name,
                 event: chip.event,
                 points: points,
-                benchBoost: nil,
+                benchBoost: benchBoost,
                 fieldPoints: nil
             )
         }
@@ -119,41 +171,75 @@ class LeagueStatisticsRepository: ObservableObject {
     private func calculateRecords(from members: [LeagueMember]) -> [LeagueRecord] {
         var records: [LeagueRecord] = []
         
-        // Best GW
-        if let best = members.flatMap({ member in
+        // Best GW - with improved algorithm
+        let allGameweeks = members.flatMap { member in
             member.gameweekHistory.map { gw in
-                (member, gw.event, gw.points)
+                (member: member, gameweek: gw.event, points: gw.points)
             }
-        }).max(by: { $0.2 < $1.2}) {
+        }
+        
+        if let best = allGameweeks.max(by: { $0.points < $1.points }) {
             records.append(LeagueRecord(
                 type: .bestGameweek,
-                value: best.2,
-                managerId: best.0.entry,
-                managerName: best.0.playerName,
-                entryName: best.0.entryName,
-                gameweek: best.1,
+                value: best.points,
+                managerId: best.member.entry,
+                managerName: best.member.playerName,
+                entryName: best.member.entryName,
+                gameweek: best.gameweek,
                 additionalInfo: nil
             ))
         }
         
-        // Worst GW
-        if let worst = members.flatMap({ member in
-            member.gameweekHistory
-                .filter { $0.points > 0 }
-                .map { gw in (member, gw.event, gw.points)}
-        }).min(by: { $0.2 < $1.2}) {
+        // Worst GW (excluding zeros)
+        if let worst = allGameweeks
+            .filter({ $0.points > 0 })
+            .min(by: { $0.points < $1.points }) {
             records.append(LeagueRecord(
                 type: .worstGameweek,
-                value: worst.2,
-                managerId: worst.0.entry,
-                managerName: worst.0.playerName,
-                entryName: worst.0.entryName,
-                gameweek: worst.1,
+                value: worst.points,
+                managerId: worst.member.entry,
+                managerName: worst.member.playerName,
+                entryName: worst.member.entryName,
+                gameweek: worst.gameweek,
                 additionalInfo: nil
             ))
         }
         
-        // Best chips
+        // Most consistent manager
+        let consistencyScores = members.map { member in
+            let points = member.gameweekHistory.map { Double($0.points) }
+            let average = points.isEmpty ? 0 : points.reduce(0, +) / Double(points.count)
+            let variance = points.isEmpty ? 0 : points
+                .map { pow($0 - average, 2) }
+                .reduce(0, +) / Double(points.count)
+            let stdDev = sqrt(variance)
+            return (member: member, consistency: stdDev, average: average)
+        }
+        
+        if let mostConsistent = consistencyScores
+            .filter({ $0.average > 0 })
+            .min(by: { $0.consistency < $1.consistency }) {
+            records.append(LeagueRecord(
+                type: .mostConsistent,
+                value: Int(mostConsistent.average),
+                managerId: mostConsistent.member.entry,
+                managerName: mostConsistent.member.playerName,
+                entryName: mostConsistent.member.entryName,
+                gameweek: nil,
+                additionalInfo: "σ = \(String(format: "%.1f", mostConsistent.consistency))"
+            ))
+        }
+        
+        // Best chips with improved logic
+        processChipRecords(&records, from: members)
+        
+        // Biggest rise/fall
+        processMomentumRecords(&records, from: members)
+        
+        return records
+    }
+    
+    private func processChipRecords(_ records: inout [LeagueRecord], from members: [LeagueMember]) {
         let chipTypes: [(ChipType, RecordType)] = [
             (.benchBoost, .bestBenchBoost),
             (.tripleCaptain, .bestTripleCaptain),
@@ -161,24 +247,63 @@ class LeagueStatisticsRepository: ObservableObject {
             (.wildcard, .bestWildcard)
         ]
         
-        for (chipType, recordTyoe) in chipTypes {
-            if let bestChip = members.flatMap({ member in
+        for (chipType, recordType) in chipTypes {
+            let chipUsages = members.flatMap { member in
                 member.chips
                     .filter { $0.name == chipType.rawValue }
-                    .map { chip in (member, chip) }
-            }).max(by: { $0.1.points < $1.1.points }) {
+                    .map { (member: member, chip: $0) }
+            }
+            
+            if let bestChip = chipUsages.max(by: { $0.chip.points < $1.chip.points }) {
                 records.append(LeagueRecord(
-                    type: recordTyoe,
-                    value: bestChip.1.points,
-                    managerId: bestChip.0.entry,
-                    managerName: bestChip.0.playerName,
-                    entryName: bestChip.0.entryName,
-                    gameweek: bestChip.1.event,
+                    type: recordType,
+                    value: bestChip.chip.points,
+                    managerId: bestChip.member.entry,
+                    managerName: bestChip.member.playerName,
+                    entryName: bestChip.member.entryName,
+                    gameweek: bestChip.chip.event,
                     additionalInfo: chipType.displayName
                 ))
             }
         }
-        return records
+    }
+    
+    private func processMomentumRecords(_ records: inout [LeagueRecord], from members: [LeagueMember]) {
+        // Calculate biggest weekly rank improvements
+        for member in members {
+            let history = member.gameweekHistory
+            guard history.count > 1 else { continue }
+            
+            for i in 1..<history.count {
+                let rankChange = history[i-1].rank - history[i].rank
+                
+                // Check for biggest rise
+                if let currentBiggestRise = records.first(where: { $0.type == .biggestRise }) {
+                    if rankChange > currentBiggestRise.value {
+                        records.removeAll { $0.type == .biggestRise }
+                        records.append(LeagueRecord(
+                            type: .biggestRise,
+                            value: rankChange,
+                            managerId: member.entry,
+                            managerName: member.playerName,
+                            entryName: member.entryName,
+                            gameweek: history[i].event,
+                            additionalInfo: "+\(rankChange) places"
+                        ))
+                    }
+                } else if rankChange > 0 {
+                    records.append(LeagueRecord(
+                        type: .biggestRise,
+                        value: rankChange,
+                        managerId: member.entry,
+                        managerName: member.playerName,
+                        entryName: member.entryName,
+                        gameweek: history[i].event,
+                        additionalInfo: "+\(rankChange) places"
+                    ))
+                }
+            }
+        }
     }
     
     private func calculateManagerStatistics(from members: [LeagueMember]) -> [ManagerStatistics] {
@@ -187,10 +312,12 @@ class LeagueStatisticsRepository: ObservableObject {
             let average = points.isEmpty ? 0 : points.reduce(0, +) / Double(points.count)
             
             let variance = points.isEmpty ? 0 : points
-                .map { pow($0 - average, 2)}.reduce(0,+) / Double(points.count)
+                .map { pow($0 - average, 2) }
+                .reduce(0, +) / Double(points.count)
             let stdDev = sqrt(variance)
             
             let streak = calculateStreak(for: member.gameweekHistory)
+            let captainSuccess = calculateCaptainSuccess(for: member)
             
             return ManagerStatistics(
                 id: member.id,
@@ -202,12 +329,23 @@ class LeagueStatisticsRepository: ObservableObject {
                 bestWeek: member.gameweekHistory.map { $0.points }.max() ?? 0,
                 worstWeek: member.gameweekHistory.filter { $0.points > 0 }.map { $0.points }.min() ?? 0,
                 currentStreak: streak,
-                captainSuccess: 0,
+                captainSuccess: captainSuccess,
                 benchWaste: Double(member.gameweekHistory.map { $0.benchPoints }.reduce(0, +)) / Double(max(member.gameweekHistory.count, 1)),
                 chipsUsed: member.chips.count,
                 totalTransfers: member.gameweekHistory.map { $0.transfers }.reduce(0, +)
             )
         }
+    }
+    
+    private func calculateCaptainSuccess(for member: LeagueMember) -> Double {
+        // Estimate captain success based on points distribution
+        let gameweeks = member.gameweekHistory
+        guard !gameweeks.isEmpty else { return 0 }
+        
+        let averagePoints = Double(gameweeks.map { $0.points }.reduce(0, +)) / Double(gameweeks.count)
+        let highScoringWeeks = gameweeks.filter { Double($0.points) > averagePoints * 1.2 }.count
+        
+        return Double(highScoringWeeks) / Double(gameweeks.count) * 100
     }
     
     private func calculateStreak(for history: [GameweekPerformance]) -> StreakInfo {
@@ -216,27 +354,44 @@ class LeagueStatisticsRepository: ObservableObject {
         }
         
         var greenArrows = 0
+        var redArrows = 0
         let recentGames = Array(history.suffix(5))
         
         for i in 1..<recentGames.count {
             if recentGames[i].rank < recentGames[i-1].rank {
                 greenArrows += 1
+                redArrows = 0
+            } else if recentGames[i].rank > recentGames[i-1].rank {
+                redArrows += 1
+                greenArrows = 0
             }
         }
-        return StreakInfo(
-            type: greenArrows > 2 ? .greenArrows : .redArrows,
-            count: greenArrows,
-            startWeek: recentGames.last?.event ?? 0
-        )
+        
+        if greenArrows > redArrows {
+            return StreakInfo(
+                type: .greenArrows,
+                count: greenArrows,
+                startWeek: recentGames.last?.event ?? 0
+            )
+        } else {
+            return StreakInfo(
+                type: .redArrows,
+                count: redArrows,
+                startWeek: recentGames.last?.event ?? 0
+            )
+        }
     }
     
     private func calculateHeadToHeadRecords(from members: [LeagueMember]) -> [HeadToHeadRecord] {
         var records: [HeadToHeadRecord] = []
-            
-        for i in 0..<members.count {
-            for j in (i+1)..<members.count {
-                let member1 = members[i]
-                let member2 = members[j]
+        
+        // Only calculate for a reasonable number of comparisons
+        let membersToCompare = Array(members.prefix(20))
+        
+        for i in 0..<membersToCompare.count {
+            for j in (i+1)..<membersToCompare.count {
+                let member1 = membersToCompare[i]
+                let member2 = membersToCompare[j]
                 
                 var wins = 0, draws = 0, losses = 0
                 var totalFor = 0, totalAgainst = 0

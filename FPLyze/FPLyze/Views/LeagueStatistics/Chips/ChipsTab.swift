@@ -96,18 +96,6 @@ struct ChipsTab: View {
             }
         }
         .background(Color("FplBackground"))
-        .sheet(isPresented: $showingDetail) {
-            if let usage = selectedUsage,
-               let member = selectedChipUsage.first(where: { $0.1.id == usage.id })?.0 {
-                ChipDetailView(
-                    member: member,
-                    usage: usage,
-                    onDismiss: {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                )
-            }
-        }
     }
 }
 
