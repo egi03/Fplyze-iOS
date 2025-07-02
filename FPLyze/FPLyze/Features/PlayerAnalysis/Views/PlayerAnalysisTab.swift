@@ -440,8 +440,8 @@ struct EnhancedMissedPlayerRow: View {
                         .font(.caption2)
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
-                        .background(Color(missed.impact.color).opacity(0.2))
-                        .foregroundColor(Color(missed.impact.color))
+                        .background(colorForString(missed.impact.color).opacity(0.2))
+                        .foregroundColor(colorForString(missed.impact.color))
                         .cornerRadius(4)
                     
                     Text(impactDescription)

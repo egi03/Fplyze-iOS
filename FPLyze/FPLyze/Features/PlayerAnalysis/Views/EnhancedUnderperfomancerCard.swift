@@ -340,25 +340,23 @@ struct EnhancedUnderperformerRow: View {
 
 
 // Color Extension for Impact/Rating colors
-extension Color {
-    init(_ colorString: String) {
-        switch colorString {
+func colorForString(_ colorString: String) -> Color {
+    switch(colorString){
         case "red":
-            self = .red
+            return .red
         case "orange":
-            self = .orange
+            return .orange
         case "yellow":
-            self = .yellow
+            return .yellow
         case "green":
-            self = .green
+            return .green
         case "blue":
-            self = .blue
+            return .blue
         case "purple":
-            self = .purple
+            return .purple
         case "gray":
-            self = .gray
+            return .gray
         default:
-            self = .gray
+            return .gray
         }
     }
-}

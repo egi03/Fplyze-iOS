@@ -79,13 +79,6 @@ struct LeagueStatisticsView: View {
                 }
             }
         }
-        .sheet(isPresented: $showShareSheet) {
-            if let statistics = viewModel.statistics {
-                ShareSheet(
-                    activityItems: [generateShareText(for: statistics)]
-                )
-            }
-        }
     }
     
     private var loadingView: some View {
