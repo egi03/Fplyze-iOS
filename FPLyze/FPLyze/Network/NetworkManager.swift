@@ -111,12 +111,28 @@ class FPLAPIService {
             }
             
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
             
             do {
                 return try decoder.decode(T.self, from: data)
             } catch let decodingError {
-                // Try to provide more context about the decoding error
+                print("Decoding error for \(T.self): \(decodingError)")
+                
+                if let decodingError = decodingError as? DecodingError {
+                    switch decodingError {
+                    case .keyNotFound(let key, let context):
+                        print("Key '\(key.stringValue)' not found: \(context.debugDescription)")
+                    case .typeMismatch(let type, let context):
+                        print("Type mismatch for type \(type): \(context.debugDescription)")
+                    case .valueNotFound(let type, let context):
+                        print("Value not found for type \(type): \(context.debugDescription)")
+                    case .dataCorrupted(let context):
+                        print("Data corrupted: \(context.debugDescription)")
+                    @unknown default:
+                        print("Unknown decoding error")
+                    }
+                }
+                
                 if let jsonObject = try? JSONSerialization.jsonObject(with: data),
                    let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
                    let jsonString = String(data: jsonData, encoding: .utf8) {
@@ -207,6 +223,26 @@ class FPLAPIService {
             "entry/\(entryId)/transfers",
             type: [TransferHistory].self
         )
+    }
+    
+    func debugLeagueData(leagueId: Int) async throws -> String {
+        guard let url = URL(string: "\(baseURL)/leagues-classic/\(leagueId)/standings/") else {
+            throw NetworkError.invalidURL
+        }
+        
+        let (data, response) = try await session.data(from: url)
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            print("HTTP Status Code: \(httpResponse.statusCode)")
+            print("Headers: \(httpResponse.allHeaderFields)")
+        }
+        
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("Raw response: \(jsonString)")
+            return jsonString
+        }
+        
+        throw NetworkError.noData
     }
 }
 

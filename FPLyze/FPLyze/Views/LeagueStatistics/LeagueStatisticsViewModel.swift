@@ -16,10 +16,12 @@ class LeagueStatisticsViewModel: ObservableObject {
     @Published var selectedTab: StatisticsTab = .records
     @Published var selectedManagerId: Int?
     @Published var refreshing = false
+    @Published var isFavorite = false
     
     private let repository = LeagueStatisticsRepository()
     private let preferences = UserPreferences.shared
     private var cancellables = Set<AnyCancellable>()
+    private var currentLeagueId: Int?
     
     enum ViewState: Equatable {
         case idle
@@ -68,11 +70,12 @@ class LeagueStatisticsViewModel: ObservableObject {
     }
     
     var leagueName: String? {
-        statistics?.members.first?.entryName
+        statistics?.leagueName
     }
     
     init() {
         setupBindings()
+        setupFavoritesObserver()
     }
     
     private func setupBindings() {
@@ -87,8 +90,21 @@ class LeagueStatisticsViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    private func setupFavoritesObserver() {
+        preferences.$favoriteLeagues
+            .sink { [weak self] _ in
+                guard let self = self, let leagueId = self.currentLeagueId else { return }
+                self.isFavorite = self.preferences.isFavorite(leagueId)
+            }
+            .store(in: &cancellables)
+    }
+    
     func loadStatistics(for leagueId: Int, forceRefresh: Bool = false) async {
         guard !isLoading || forceRefresh else { return }
+        
+        currentLeagueId = leagueId
+        isFavorite = preferences.isFavorite(leagueId)
+        
         
         state = .loading(progress: 0.0, message: "Initializing...")
         
@@ -105,7 +121,7 @@ class LeagueStatisticsViewModel: ObservableObject {
             if let firstMember = stats.members.first {
                 preferences.addRecentSearch(
                     leagueId: leagueId,
-                    name: "League of \(firstMember.playerName)"
+                    name: stats.leagueName
                 )
             }
             
@@ -131,14 +147,13 @@ class LeagueStatisticsViewModel: ObservableObject {
         selectedManagerId = managerId
     }
     
+    
     func toggleFavorite(leagueId: Int) {
         guard let stats = statistics else { return }
         
-        let leagueName = stats.members.first.map { "League of \($0.playerName)" } ?? "League \(leagueId)"
+        let leagueName = stats.leagueName
         preferences.toggleFavorite(leagueId: leagueId, name: leagueName)
+        isFavorite = preferences.isFavorite(leagueId)
     }
-    
-    func isFavorite(leagueId: Int) -> Bool {
-        preferences.isFavorite(leagueId)
-    }
+
 }

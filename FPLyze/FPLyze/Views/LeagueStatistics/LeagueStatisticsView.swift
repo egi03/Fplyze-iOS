@@ -38,7 +38,7 @@ struct LeagueStatisticsView: View {
                     errorView(error: viewModel.error ?? "Unknown error")
                 }
             }
-            .navigationTitle("League Statistics")
+            .navigationTitle(viewModel.leagueName ?? "League Statistics")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -55,9 +55,10 @@ struct LeagueStatisticsView: View {
                                 viewModel.toggleFavorite(leagueId: leagueId)
                             }
                         }) {
-                            Image(systemName: viewModel.isFavorite(leagueId: leagueId) ? "star.fill" : "star")
-                                .foregroundColor(viewModel.isFavorite(leagueId: leagueId) ? .yellow : .white)
-                                .scaleEffect(viewModel.isFavorite(leagueId: leagueId) ? 1.2 : 1.0)
+                            Image(systemName: viewModel.isFavorite ? "star.fill" : "star")
+                                .foregroundColor(viewModel.isFavorite ? .yellow : .white)
+                                .scaleEffect(viewModel.isFavorite ? 1.2 : 1.0)
+                                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: viewModel.isFavorite)
                         }
                         
                         // Share Button
@@ -67,6 +68,14 @@ struct LeagueStatisticsView: View {
                             Image(systemName: "square.and.arrow.up")
                         }
                     }
+                }
+            }
+            .sheet(isPresented: $showShareSheet) {
+                if let statistics = viewModel.statistics {
+                    ShareSheet(
+                        activityItems: [generateShareText(for: statistics)]
+
+                    )
                 }
             }
         }
@@ -158,17 +167,38 @@ struct LeagueStatisticsView: View {
             Text(error)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
+                .padding(.horizontal)
             
-            Button(action: {
-                Task {
-                    await viewModel.loadStatistics(for: leagueId)
+            HStack(spacing: 20) {
+                Button(action: {
+                    Task {
+                        await viewModel.loadStatistics(for: leagueId)
+                    }
+                }) {
+                    Label("Retry", systemImage: "arrow.clockwise")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-            }) {
-                Label("Retry", systemImage: "arrow.clockwise")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                
+                // Debug button
+                Button(action: {
+                    Task {
+                        do {
+                            let rawData = try await FPLAPIService.shared.debugLeagueData(leagueId: leagueId)
+                            print("Debug data fetched - check console")
+                        } catch {
+                            print("Debug fetch failed: \(error)")
+                        }
+                    }
+                }) {
+                    Label("Debug", systemImage: "ladybug")
+                        .padding()
+                        .background(Color.orange)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
         }
         .padding()
@@ -200,6 +230,12 @@ struct LeagueStatisticsView: View {
                 
                 TrendsTab(members: statistics.members)
                     .tag(StatisticsTab.trends)
+                
+                PlayerAnalysisTab(
+                    missedAnalyses: statistics.missedPlayerAnalyses,
+                    underperformerAnalyses: statistics.underperformerAnalyses
+                )
+                .tag(StatisticsTab.playerAnalysis)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(.easeInOut, value: viewModel.selectedTab)
@@ -210,7 +246,7 @@ struct LeagueStatisticsView: View {
     }
     
     private func generateShareText(for statistics: LeagueStatisticsData) -> String {
-        var text = "FPLyze League Statistics (ID: \(leagueId))\n\n"
+        var text = "\(statistics.leagueName) (ID: \(leagueId))\n\n"
         
         if let bestGW = statistics.records.first(where: { $0.type == .bestGameweek }) {
             text += "🏆 Best Gameweek: \(bestGW.managerName) - \(bestGW.value) pts\n"

@@ -15,31 +15,31 @@ struct RecentSearchRow: View {
         Button(action: action) {
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(Color("FplTextSecondary"))
+                    .foregroundColor(.white.opacity(0.6))
                     .frame(width: 30)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text("League ID: \(search.leagueId)")
                         .font(.subheadline)
-                        .foregroundColor(Color("FplTextPrimary"))
+                        .foregroundColor(.white)
                     
                     if let name = search.leagueName {
                         Text(name)
                             .font(.caption)
-                            .foregroundColor(Color("FplTextSecondary"))
+                            .foregroundColor(.white.opacity(0.8))
+                            .lineLimit(1)
                     }
                 }
                 
                 Spacer()
                 
                 Image(systemName: "chevron.right")
-                    .foregroundColor(Color("FplTextSecondary"))
+                    .foregroundColor(.white.opacity(0.6))
                     .font(.caption)
             }
             .padding()
-            .background(Color("FplCardBackground"))
+            .background(Color.white.opacity(0.15))
             .cornerRadius(10)
-            .shadow(color: .black.opacity(0.05), radius: 3)
         }
         .buttonStyle(PlainButtonStyle())
     }

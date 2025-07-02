@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct FPLyzeApp: App {
+    init() {
+        UITableView.appearance().backgroundColor = .white
+        UICollectionView.appearance().backgroundColor = .white
+    }
+    
     var body: some Scene {
         WindowGroup {
             HomeView()

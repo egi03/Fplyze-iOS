@@ -23,6 +23,16 @@ struct GameweekHistory: Codable {
     let eventTransfers: Int
     let eventTransfersCost: Int
     let pointsOnBench: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case event, points, rank, bank, value
+        case totalPoints = "total_points"
+        case rankSort = "rank_sort"
+        case overallRank = "overall_rank"
+        case eventTransfers = "event_transfers"
+        case eventTransfersCost = "event_transfers_cost"
+        case pointsOnBench = "points_on_bench"
+    }
 }
 
 struct ChipPlay: Codable {
@@ -35,4 +45,10 @@ struct PastSeason: Codable {
     let seasonName: String
     let rank: Int
     let totalPoints: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case rank
+        case seasonName = "season_name"
+        case totalPoints = "total_points"
+    }
 }

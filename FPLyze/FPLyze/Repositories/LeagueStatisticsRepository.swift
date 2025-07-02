@@ -16,6 +16,8 @@ class LeagueStatisticsRepository: ObservableObject {
     @Published var loadingProgress: Double = 0.0
     @Published var loadingMessage: String = ""
     
+    private var currentLeagueInfo: League?
+    
     // Settings for performance
     private let batchSize = 10 // Process members in batches
     private let maxConcurrentRequests = 5 // Limit concurrent API calls
@@ -29,7 +31,7 @@ class LeagueStatisticsRepository: ObservableObject {
         loadingProgress = 0.0
         loadingMessage = "Fetching league members..."
         
-        let members = try await fetchAllMembers(leagueId: leagueId)
+        let (members, leagueName) = try await fetchAllMembers(leagueId: leagueId)
         
         loadingMessage = "Loading detailed statistics..."
         let detailedMembers = try await fetchMembersInBatches(members)
@@ -39,10 +41,21 @@ class LeagueStatisticsRepository: ObservableObject {
         
         // Perform player analysis
         loadingMessage = "Analyzing player performance..."
-        let (missedAnalyses, underperformerAnalyses) = try await playerAnalysisService.analyzeLeague(detailedMembers)
+        let missedAnalyses: [MissedPlayerAnalysis]
+        let underperformerAnalyses: [UnderperformerAnalysis]
+
+        do {
+            (missedAnalyses, underperformerAnalyses) = try await playerAnalysisService.analyzeLeague(detailedMembers)
+        } catch {
+            print("Player analysis failed: \(error)")
+            // Continue without player analysis data
+            missedAnalyses = []
+            underperformerAnalyses = []
+        }
         
         let statistics = LeagueStatisticsData(
             leagueId: leagueId,
+            leagueName: leagueName,
             records: calculateRecords(from: detailedMembers),
             managerStatistics: calculateManagerStatistics(from: detailedMembers),
             headToHeadStatistics: calculateHeadToHeadRecords(from: detailedMembers),
@@ -58,16 +71,23 @@ class LeagueStatisticsRepository: ObservableObject {
         return statistics
     }
     
-    private func fetchAllMembers(leagueId: Int) async throws -> [LeagueMember] {
+    private func fetchAllMembers(leagueId: Int) async throws ->  ([LeagueMember], String) {
         var allMembers: [LeagueMember] = []
         var page = 1
         var hasMore = true
+        var leagueName = "Unknown"
+        
         
         while hasMore {
             let response = try await apiService.getLeagueStandings(
                 leagueId: leagueId,
                 page: page
             )
+            
+            if page == 1 {
+                leagueName = response.league.name
+                currentLeagueInfo = response.league
+            }
             
             let members = response.standings.results.map { result in
                 LeagueMember(
@@ -90,7 +110,7 @@ class LeagueStatisticsRepository: ObservableObject {
             loadingProgress = min(0.3, Double(allMembers.count) / 100.0 * 0.3)
         }
         
-        return allMembers
+        return (allMembers, leagueName)
     }
     
     private func fetchMembersInBatches(_ members: [LeagueMember]) async throws -> [LeagueMember] {
@@ -129,43 +149,47 @@ class LeagueStatisticsRepository: ObservableObject {
     }
     
     private func fetchMemberDetails(_ member: LeagueMember) async throws -> LeagueMember {
-        let history = try await apiService.getManagerHistory(entryId: member.entry)
-        
-        var updatedMember = member
-        
-        updatedMember.gameweekHistory = history.current.map { gw in
-            GameweekPerformance(
-                event: gw.event,
-                points: gw.points,
-                totalPoints: gw.totalPoints,
-                rank: gw.rank,
-                overallRank: gw.overallRank,
-                benchPoints: gw.pointsOnBench,
-                transfers: gw.eventTransfers,
-                transfersCost: gw.eventTransfersCost,
-                value: gw.value,
-                activeChip: nil
-            )
-        }
-        
-        // Process chips with better performance data
-        updatedMember.chips = history.chips.map { chip in
-            let chipGameweek = updatedMember.gameweekHistory
-                .first { $0.event == chip.event }
+        do {
+            let history = try await apiService.getManagerHistory(entryId: member.entry)
             
-            let points = chipGameweek?.points ?? 0
-            let benchBoost = chip.name == "bboost" ? chipGameweek?.benchPoints : nil
+            var updatedMember = member
             
-            return ChipUsage(
-                name: chip.name,
-                event: chip.event,
-                points: points,
-                benchBoost: benchBoost,
-                fieldPoints: nil
-            )
+            updatedMember.gameweekHistory = history.current.map { gw in
+                GameweekPerformance(
+                    event: gw.event,
+                    points: gw.points,
+                    totalPoints: gw.totalPoints,
+                    rank: gw.rank,
+                    overallRank: gw.overallRank,
+                    benchPoints: gw.pointsOnBench,
+                    transfers: gw.eventTransfers,
+                    transfersCost: gw.eventTransfersCost,
+                    value: gw.value,
+                    activeChip: nil
+                )
+            }
+            
+            updatedMember.chips = history.chips.map { chip in
+                let chipGameweek = updatedMember.gameweekHistory
+                    .first { $0.event == chip.event }
+                
+                let points = chipGameweek?.points ?? 0
+                let benchBoost = chip.name == "bboost" ? chipGameweek?.benchPoints : nil
+                
+                return ChipUsage(
+                    name: chip.name,
+                    event: chip.event,
+                    points: points,
+                    benchBoost: benchBoost,
+                    fieldPoints: nil
+                )
+            }
+            
+            return updatedMember
+        } catch {
+            print("Failed to fetch details for member \(member.playerName): \(error)")
+            return member
         }
-        
-        return updatedMember
     }
     
     private func calculateRecords(from members: [LeagueMember]) -> [LeagueRecord] {

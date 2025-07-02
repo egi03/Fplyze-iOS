@@ -10,6 +10,7 @@ import Foundation
 
 struct LeagueStatisticsData {
     let leagueId: Int
+    let leagueName: String
     let records: [LeagueRecord]
     let managerStatistics: [ManagerStatistics]
     let headToHeadStatistics: [HeadToHeadRecord]
@@ -19,6 +20,7 @@ struct LeagueStatisticsData {
     
     init(
         leagueId: Int,
+        leagueName: String,
         records: [LeagueRecord],
         managerStatistics: [ManagerStatistics],
         headToHeadStatistics: [HeadToHeadRecord],
@@ -27,6 +29,7 @@ struct LeagueStatisticsData {
         underperformerAnalyses: [UnderperformerAnalysis] = []
     ) {
         self.leagueId = leagueId
+        self.leagueName = leagueName
         self.records = records
         self.managerStatistics = managerStatistics
         self.headToHeadStatistics = headToHeadStatistics

@@ -11,7 +11,7 @@ import Foundation
 struct PlayerData: Codable {
     let id: Int
     let webName: String
-    let teamCode: Int
+    let teamCode: Int?
     let elementType: Int
     let nowCost: Int
     let totalPoints: Int
@@ -20,11 +20,25 @@ struct PlayerData: Codable {
     let assists: Int
     let cleanSheets: Int
     let selectedByPercent: String
-    let form: String
+    let form: String?
     let pointsPerGame: String
-    let ictIndex: String
-    let status: String
-    let news: String
+    let ictIndex: String?
+    let status: String?
+    let news: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, minutes, assists, form, status, news
+        case webName = "web_name"
+        case teamCode = "team_code"
+        case elementType = "element_type"
+        case nowCost = "now_cost"
+        case totalPoints = "total_points"
+        case goalsScored = "goals_scored"
+        case cleanSheets = "clean_sheets"
+        case selectedByPercent = "selected_by_percent"
+        case pointsPerGame = "points_per_game"
+        case ictIndex = "ict_index"
+    }
     
     var displayName: String {
         webName
@@ -49,7 +63,6 @@ struct PlayerData: Codable {
         return Double(totalPoints) / Double(minutes) * 90
     }
 }
-
 // MARK: - Analysis Results
 struct MissedPlayerAnalysis: Identifiable {
     let id = UUID()

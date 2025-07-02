@@ -13,32 +13,43 @@ struct FavoriteLeagueCard: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Image(systemName: "star.fill")
-                        .font(.caption)
+                        .font(.title3)
                         .foregroundColor(.yellow)
                     
+                    Spacer()
+                    
+                    Image(systemName: "arrow.right.circle")
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.8))
+                }
+                
+                VStack(alignment: .leading, spacing: 4) {
                     Text(favorite.name)
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(Color("FplTextPrimary"))
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Text("ID: \(favorite.id)")
+                        .font(.caption)
+                        .foregroundColor(Color("FplTextSecondary"))
+                    
+                    Text(favorite.formattedDate)
+                        .font(.caption2)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
                 
-                Text("ID: \(favorite.id)")
-                    .font(.caption)
-                    .foregroundColor(Color("FplTextSecondary"))
-                
-                Text(favorite.formattedDate)
-                    .font(.caption2)
-                    .foregroundColor(Color("FplTextSecondary"))
+                Spacer()
             }
             .padding()
-            .frame(width: 180)
-            .background(Color("FplCardBackground"))
-            .cornerRadius(12)
-            .shadow(color: .black.opacity(0.1), radius: 5)
+            .frame(width: 200, height: 120)
+            .background(Color.white)
+            .cornerRadius(15)
+            .shadow(color: .black.opacity(0.15), radius: 8, y: 4)
         }
         .buttonStyle(PlainButtonStyle())
         .scaleEffect(0.98)

@@ -12,6 +12,7 @@ enum StatisticsTab: String, CaseIterable {
     case headToHead = "Head-to-Head"
     case chips = "Chips"
     case trends = "Trends"
+    case playerAnalysis = "Analysis"
     
     var icon: String {
         switch self {
@@ -20,6 +21,7 @@ enum StatisticsTab: String, CaseIterable {
         case .headToHead: return "person.2.fill"
         case .chips: return "star.circle.fill"
         case .trends: return "chart.line.uptrend.xyaxis"
+        case .playerAnalysis: return "magnifyingglass.circle.fill"
         }
     }
 }
