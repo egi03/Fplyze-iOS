@@ -56,7 +56,7 @@ struct SearchBar: View {
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             
             TextField("Search managers...", text: $text)
                 .textFieldStyle(PlainTextFieldStyle())
@@ -64,7 +64,7 @@ struct SearchBar: View {
             if !text.isEmpty {
                 Button(action: { text = "" }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
             }
         }
@@ -94,7 +94,7 @@ struct HeadToHeadCard: View {
                     if isExpanded {
                         Text("\(record.totalPointsFor) pts")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -110,7 +110,7 @@ struct HeadToHeadCard: View {
                                 .foregroundColor(.green)
                             Text("W")
                                 .font(.caption2)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                         }
                         
                         // Draws
@@ -121,7 +121,7 @@ struct HeadToHeadCard: View {
                                 .foregroundColor(.gray)
                             Text("D")
                                 .font(.caption2)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                         }
                         
                         // Losses
@@ -132,7 +132,7 @@ struct HeadToHeadCard: View {
                                 .foregroundColor(.red)
                             Text("L")
                                 .font(.caption2)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                         }
                     }
                     
@@ -143,7 +143,7 @@ struct HeadToHeadCard: View {
                         
                         Text("\(Int(winPercentage))% Win Rate")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                     }
                 }
                 
@@ -156,7 +156,7 @@ struct HeadToHeadCard: View {
                     if isExpanded {
                         Text("\(record.totalPointsAgainst) pts")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -192,7 +192,7 @@ struct HeadToHeadCard: View {
                         VStack(alignment: .leading) {
                             Text("Total Points For")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                             Text("\(record.totalPointsFor)")
                                 .font(.headline)
                         }
@@ -202,7 +202,7 @@ struct HeadToHeadCard: View {
                         VStack(alignment: .trailing) {
                             Text("Total Points Against")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                             Text("\(record.totalPointsAgainst)")
                                 .font(.headline)
                         }
@@ -228,7 +228,7 @@ struct BigResultView: View {
         VStack(spacing: 8) {
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             
             Text("\(comparison.manager1Points) - \(comparison.manager2Points)")
                 .font(.headline)
@@ -236,7 +236,7 @@ struct BigResultView: View {
             
             Text("GW \(comparison.gameweek)")
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             
             Text("+\(comparison.difference)")
                 .font(.caption)
@@ -248,7 +248,7 @@ struct BigResultView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.gray.opacity(0.05))
+        .background(Color("FplSurface"))
         .cornerRadius(10)
     }
 }

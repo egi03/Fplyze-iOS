@@ -37,7 +37,7 @@ struct EnhancedUnderperformerCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(analysis.managerName)
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(Color("FplTextPrimary"))
                     
                     if let worst = analysis.worstPerformer {
                         HStack(spacing: 4) {
@@ -74,7 +74,7 @@ struct EnhancedUnderperformerCard: View {
                         
                         Text("players")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                             .padding(.bottom, 4)
                     }
                     
@@ -138,7 +138,7 @@ struct EnhancedUnderperformerCard: View {
                                 
                                 Text("Sorted by avg pts/game")
                                     .font(.caption2)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color("FplTextSecondary"))
                             }
                             
                             ForEach(analysis.underperformers.sorted { $0.avgPointsPerGame < $1.avgPointsPerGame }.prefix(5)) { underperformer in
@@ -151,7 +151,7 @@ struct EnhancedUnderperformerCard: View {
                             if analysis.underperformers.count > 5 {
                                 Text("+ \(analysis.underperformers.count - 5) more underperformers")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color("FplTextSecondary"))
                                     .padding(.top, 8)
                             }
                         }
@@ -161,7 +161,7 @@ struct EnhancedUnderperformerCard: View {
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
-        .background(Color("FplCardBackground"))
+        .background(Color("FplSurface"))
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.1), radius: 5)
     }
@@ -177,7 +177,7 @@ struct SummaryStatBox: View {
         VStack(spacing: 4) {
             Text(title)
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             
             Text(value)
                 .font(.headline)
@@ -186,7 +186,7 @@ struct SummaryStatBox: View {
             
             Text(subtitle)
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
@@ -235,7 +235,7 @@ struct EnhancedUnderperformerRow: View {
                         Text(underperformer.player.displayName)
                             .font(.subheadline)
                             .fontWeight(.medium)
-                            .foregroundColor(.primary)
+                            .foregroundColor(Color("FplTextPrimary"))
                         
                         HStack(spacing: 8) {
                             Label("\(underperformer.gamesOwned) games", systemImage: "gamecontroller")
@@ -261,7 +261,7 @@ struct EnhancedUnderperformerRow: View {
                             
                             Text("pts/gw")
                                 .font(.caption2)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                         }
                         
                         Text(underperformer.performanceRating.label)
@@ -279,20 +279,20 @@ struct EnhancedUnderperformerRow: View {
                     HStack {
                         Text(performanceContext)
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                         
                         Spacer()
                         
                         Text("Expected: \(String(format: "%.1f", expectedPoints)) pts/gw")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                     }
                     
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             // Background
                             Rectangle()
-                                .fill(Color.white.opacity(0.2))
+                                .fill(Color("FplSurface"))
                                 .frame(height: 4)
                                 .cornerRadius(2)
                             
@@ -317,7 +317,7 @@ struct EnhancedUnderperformerRow: View {
                     HStack {
                         Label("\(underperformer.pointsWhileOwned) total points", systemImage: "sum")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                         
                         Spacer()
                         
@@ -361,9 +361,4 @@ extension Color {
             self = .gray
         }
     }
-}
-
-// If FplSurface color is not defined in your assets
-extension Color {
-    static let fplSurface = Color("FplSurface") // or use Color.gray.opacity(0.05) as fallback
 }

@@ -43,7 +43,7 @@ struct RankingsTab : View {
                 }
                 .padding()
             }
-            .background(Color.white)
+            background(Color("FplBackground"))
             
             ScrollView {
                 LazyVStack(spacing: 12) {

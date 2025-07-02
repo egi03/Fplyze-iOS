@@ -20,20 +20,19 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                LinearGradient(
-                    colors: [
-                        Color("FplPrimary"),
-                        Color("FplSecondary").opacity(animateGradient ? 0.8 : 0.6),
-                        Color("FplPrimary")
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: animateGradient ? .bottomTrailing : .bottomLeading
-                )
+                Color("FplBackground")
                 .ignoresSafeArea()
-                .onAppear {
-                    withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
-                        animateGradient.toggle()
-                    }
+                
+                VStack {
+                    LinearGradient(
+                        colors: [
+                            Color("FplPrimary").opacity(0.1),
+                            Color("FplBackground")
+                        ], startPoint: .top, endPoint: .bottom
+                    )
+                    .frame(height: 300)
+                    .ignoresSafeArea()
+                    Spacer()
                 }
                 
                 ScrollView {
@@ -129,7 +128,7 @@ struct HomeView: View {
                                         .foregroundColor(.white.opacity(0.8))
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 4)
-                                        .background(Color.white.opacity(0.2))
+                                        .background(Color("FplSurface"))
                                         .clipShape(Capsule())
                                 }
                                 .padding(.horizontal)
@@ -150,7 +149,7 @@ struct HomeView: View {
                                 }
                             }
                             .padding(.vertical)
-                            .background(Color.white.opacity(0.1))
+                            .background(Color("FplSurface"))
                             .cornerRadius(20)
                             .padding(.horizontal)
                         }
@@ -192,7 +191,7 @@ struct HomeView: View {
                                 .padding(.horizontal)
                             }
                             .padding(.vertical)
-                            .background(Color.white.opacity(0.1))
+                            .background(Color("FplSurface"))
                             .cornerRadius(20)
                             .padding(.horizontal)
                         }

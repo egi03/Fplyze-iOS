@@ -11,7 +11,7 @@ import SwiftUI
 struct CardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .background(Color("FplCardBackground"))
+            .background(Color("FplSurface"))
             .cornerRadius(15)
             .shadow(color: .black.opacity(0.1), radius: 5)
     }
@@ -43,11 +43,11 @@ struct LoadingOverlay: ViewModifier {
                     if let message = message {
                         Text(message)
                             .font(.headline)
-                            .foregroundColor(.primary)
+                            .foregroundColor(Color("FplTextPrimary"))
                     }
                 }
                 .padding(30)
-                .background(Color("FplCardBackground"))
+                .background(Color("FplSurface"))
                 .cornerRadius(20)
                 .shadow(radius: 10)
                 .transition(.scale.combined(with: .opacity))
@@ -77,9 +77,9 @@ struct ShimmerModifier: ViewModifier {
             .overlay(
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color.white.opacity(0),
-                        Color.white.opacity(0.3),
-                        Color.white.opacity(0)
+                        Color("FplSurface").opacity(0),
+                        Color("FplSurface").opacity(0.3),
+                        Color("FplSurface").opacity(0)
                     ]),
                     startPoint: .leading,
                     endPoint: .trailing

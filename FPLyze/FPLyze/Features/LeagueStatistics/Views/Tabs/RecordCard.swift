@@ -30,12 +30,12 @@ struct RecordCard: View {
                         
                     Text(record.managerName)
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                     
                     if let gameweek = record.gameweek {
                         Text("Gameweek \(gameweek)")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                     }
                 }
                 
@@ -49,7 +49,7 @@ struct RecordCard: View {
                     
                     Text("points")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
             }
             
@@ -67,11 +67,11 @@ struct RecordCard: View {
                             .font(.caption)
                     }
                 }
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             }
         }
         .padding()
-        .background(Color.white)
+        .background(Color("FplBackground"))
         .cornerRadius(15)
         .shadow(color: .black.opacity(0.1), radius: 5)
         .onTapGesture(perform: onTap)

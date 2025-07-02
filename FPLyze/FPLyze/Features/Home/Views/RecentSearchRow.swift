@@ -38,7 +38,7 @@ struct RecentSearchRow: View {
                     .font(.caption)
             }
             .padding()
-            .background(Color.white.opacity(0.15))
+            .background(Color("FplSurface"))
             .cornerRadius(10)
         }
         .buttonStyle(PlainButtonStyle())

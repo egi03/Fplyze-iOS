@@ -14,7 +14,7 @@ struct EmptyChartView: View {
                 .foregroundColor(.gray)
             
             Text("Select members to view trends")
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()

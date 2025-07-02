@@ -38,7 +38,7 @@ struct ChipTimelineView: View {
                             if count > 2 {
                                 Text("\(count)")
                                     .font(.system(size: 8))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color("FplTextSecondary"))
                             }
                         } else {
                             Color.clear
@@ -53,13 +53,13 @@ struct ChipTimelineView: View {
             HStack {
                 Text("GW1")
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color("FplTextSecondary"))
                 
                 Spacer()
                 
                 Text("GW38")
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color("FplTextSecondary"))
             }
         }
         .padding()

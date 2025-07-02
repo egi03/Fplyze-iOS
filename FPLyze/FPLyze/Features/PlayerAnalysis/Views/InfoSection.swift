@@ -24,7 +24,7 @@ struct InfoSection: View {
                 
                 Text(description)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color("FplTextSecondary"))
                     .fixedSize(horizontal: false, vertical: true)
             }
         }

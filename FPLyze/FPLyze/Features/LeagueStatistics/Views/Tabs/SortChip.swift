@@ -19,10 +19,7 @@ struct SortChip: View {
                 .fontWeight(isSelected ? .bold : .regular)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(
-                    Capsule()
-                        .fill(isSelected ? Color("FplPrimary") : Color.gray.opacity(0.2))
-                )
+                .background(Color("FplBackground"))
                 .foregroundColor(isSelected ? .white : .primary)
         }
     }

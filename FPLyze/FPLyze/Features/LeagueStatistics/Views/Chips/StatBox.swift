@@ -21,7 +21,7 @@ struct StatBox: View {
             
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
         }
         .frame(maxWidth: .infinity)
         .padding()

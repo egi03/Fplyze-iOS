@@ -32,15 +32,15 @@ struct ChipUsageCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(member.entryName)
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(Color("FplTextPrimary"))
                     
                     Text(member.playerName)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                     
                     Label("GW \(usage.event)", systemImage: "calendar")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
                 
                 Spacer()
@@ -55,7 +55,7 @@ struct ChipUsageCard: View {
                         
                         Text("pts")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                             .padding(.bottom, 4)
                     }
                     

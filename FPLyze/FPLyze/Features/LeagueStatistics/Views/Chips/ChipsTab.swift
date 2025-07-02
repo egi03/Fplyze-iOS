@@ -75,7 +75,7 @@ struct ChipsTab: View {
                             
                             Text("Special power usage and effectiveness")
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                         }
                         
                         Spacer()
@@ -235,7 +235,7 @@ struct EnhancedChipButton: View {
                     if count > 0 {
                         Text("\(count)/\(totalPossible)")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                         
                         Text("\(Int(usagePercentage))% used")
                             .font(.caption2)
@@ -243,7 +243,7 @@ struct EnhancedChipButton: View {
                     } else {
                         Text("Not used")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                     }
                 }
             }
@@ -288,7 +288,7 @@ struct ChipLeagueOverview: View {
             )
         }
         .padding()
-        .background(Color.white.opacity(0.1))
+        .background(Color("FplSurface"))
         .cornerRadius(12)
     }
 }
@@ -317,7 +317,7 @@ struct OverviewStat: View {
                 
                 Text(subtitle)
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color("FplTextSecondary"))
             }
         }
         .frame(maxWidth: .infinity)
@@ -376,7 +376,7 @@ struct EnhancedChipOverviewCard: View {
                     
                     Text(chipStrategy)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 
@@ -429,7 +429,7 @@ struct EnhancedStatBox: View {
         VStack(spacing: 8) {
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             
             Text(value)
                 .font(.title3)
@@ -438,7 +438,7 @@ struct EnhancedStatBox: View {
             
             Text(subtitle)
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -520,7 +520,7 @@ struct QualityBar: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.gray.opacity(0.2))
+                        .fill(Color("FplSurface"))
                         .frame(height: 20)
                     
                     RoundedRectangle(cornerRadius: 4)
@@ -571,7 +571,7 @@ struct EnhancedChipTimelineView: View {
                 if !popularGameweeks.isEmpty {
                     Text("Popular: GW\(popularGameweeks.map { String($0.gw) }.joined(separator: ", "))")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
             }
             
@@ -589,7 +589,7 @@ struct EnhancedChipTimelineView: View {
                                 if count > 2 {
                                     Text("\(count)")
                                         .font(.system(size: 8))
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(Color("FplTextSecondary"))
                                 }
                             } else {
                                 Color.clear
@@ -603,23 +603,23 @@ struct EnhancedChipTimelineView: View {
                 HStack {
                     Text("GW1")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                     
                     Spacer()
                     
                     Text("GW19")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                     
                     Spacer()
                     
                     Text("GW38")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
             }
             .padding()
-            .background(Color.white.opacity(0.05))
+            .background(Color("FplSurface"))
             .cornerRadius(10)
         }
         .padding()
@@ -687,7 +687,7 @@ struct EnhancedChipUsageCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(member.entryName)
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(Color("FplTextPrimary"))
                         .lineLimit(1)
                     
                     HStack(spacing: 8) {
@@ -697,7 +697,7 @@ struct EnhancedChipUsageCard: View {
                         Label("GW \(usage.event)", systemImage: "calendar")
                             .font(.caption)
                     }
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color("FplTextSecondary"))
                     
                     Text(timingQuality)
                         .font(.caption2)
@@ -716,7 +716,7 @@ struct EnhancedChipUsageCard: View {
                         
                         Text("pts")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                             .padding(.bottom, 4)
                     }
                     
@@ -761,11 +761,11 @@ struct EmptyChipView: View {
             
             Text("No \(chipType.displayName) used yet")
                 .font(.headline)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             
             Text("This chip hasn't been played by any manager in the league")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
         }
@@ -801,7 +801,7 @@ struct ChipsInfoSheet: View {
                         • Wildcard: Use when your team needs major surgery
                         """)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                     }
                     .padding()
                     .background(Color.blue.opacity(0.1))
@@ -861,7 +861,7 @@ struct ChipExplanation: View {
                 
                 Text(strategy)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color("FplTextSecondary"))
                     .fixedSize(horizontal: false, vertical: true)
                 
                 Label(scoreRanges, systemImage: "chart.bar.fill")

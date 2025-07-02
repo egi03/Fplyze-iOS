@@ -27,7 +27,7 @@ struct ChipOverviewCard: View {
                     
                     Text(chipDescription)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
                 
                 Spacer()

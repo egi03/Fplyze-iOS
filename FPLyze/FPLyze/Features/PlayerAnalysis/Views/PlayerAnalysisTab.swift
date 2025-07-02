@@ -66,7 +66,7 @@ struct PlayerAnalysisTab: View {
                             
                             Text("What could have been...")
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                         }
                         
                         Spacer()
@@ -94,7 +94,7 @@ struct PlayerAnalysisTab: View {
                         // Context Description
                         Text(selectedAnalysisType.detailedDescription)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
                         
@@ -108,7 +108,7 @@ struct PlayerAnalysisTab: View {
                     }
                 }
                 .padding(.bottom, 8)
-                .background(Color.white)
+                .background(Color("FplSurface"))
                 .cornerRadius(15)
                 .shadow(color: .black.opacity(0.05), radius: 5, y: 5)
                 .padding(.horizontal)
@@ -167,7 +167,7 @@ struct PlayerAnalysisTab: View {
                 .padding(.bottom, 20)
             }
         }
-        .background(Color("FplBackground"))
+        .background(Color("FplSurface"))
         .sheet(isPresented: $showingPlayerDetail) {
             if let player = selectedPlayer {
                 EnhancedPlayerDetailSheet(player: player)
@@ -231,7 +231,7 @@ struct AnalysisQuickStats: View {
             )
         }
         .padding()
-        .background(Color.white.opacity(0.1))
+        .background(Color("FplSurface"))
         .cornerRadius(12)
     }
 }
@@ -254,7 +254,7 @@ struct QuickStatBox: View {
             
             Text(title)
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
         }
         .frame(maxWidth: .infinity)
     }
@@ -282,7 +282,7 @@ struct EnhancedMissedPlayerCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(analysis.managerName)
                         .font(.headline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(Color("FplTextPrimary"))
                     
                     if let biggestMiss = analysis.biggestMiss {
                         HStack(spacing: 4) {
@@ -319,7 +319,7 @@ struct EnhancedMissedPlayerCard: View {
                         
                         Text("pts")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                             .padding(.bottom, 4)
                     }
                     
@@ -359,7 +359,7 @@ struct EnhancedMissedPlayerCard: View {
                             
                             Text("\(analysis.missedPlayers.count) total")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                         }
                         
                         ForEach(analysis.missedPlayers.prefix(5)) { missed in
@@ -372,7 +372,7 @@ struct EnhancedMissedPlayerCard: View {
                         if analysis.missedPlayers.count > 5 {
                             Text("+ \(analysis.missedPlayers.count - 5) more players")
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                                 .padding(.top, 8)
                         }
                     }
@@ -381,7 +381,7 @@ struct EnhancedMissedPlayerCard: View {
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
-        .background(Color("FplCardBackground"))
+        .background(Color("FplSurface"))
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.1), radius: 5)
     }
@@ -410,7 +410,7 @@ struct EnhancedMissedPlayerRow: View {
                     Text(missed.player.displayName)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                        .foregroundColor(.primary)
+                        .foregroundColor(Color("FplTextPrimary"))
                     
                     HStack(spacing: 8) {
                         Label("\(missed.missedGameweeks.count) GWs", systemImage: "calendar")
@@ -433,7 +433,7 @@ struct EnhancedMissedPlayerRow: View {
                         
                         Text("pts")
                             .font(.caption2)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Color("FplTextSecondary"))
                     }
                     
                     Text(missed.impact.label)
@@ -446,7 +446,7 @@ struct EnhancedMissedPlayerRow: View {
                     
                     Text(impactDescription)
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
             }
             .padding(.vertical, 8)
@@ -504,11 +504,11 @@ struct EmptyAnalysisView: View {
             
             Text("No Data Available")
                 .font(.headline)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             
             Text("Player analysis data will appear here once available")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -559,7 +559,7 @@ struct EnhancedPlayerDetailSheet: View {
                                 
                                 Text(ownershipContext)
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color("FplTextSecondary"))
                             }
                             
                             Spacer()
@@ -691,7 +691,7 @@ struct EnhancedPlayerDetailSheet: View {
                             
                             Text(news)
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color("FplTextSecondary"))
                                 .padding()
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(Color.orange.opacity(0.1))
@@ -791,7 +791,7 @@ struct EnhancedStatCard: View {
                 
                 Text(description)
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color("FplTextSecondary"))
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -800,7 +800,7 @@ struct EnhancedStatCard: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.white)
+        .background(Color("FplBackground"))
         .cornerRadius(12)
     }
 }
@@ -853,7 +853,7 @@ struct EnhancedPerformanceBar: View {
                 ZStack(alignment: .leading) {
                     // Background
                     Rectangle()
-                        .fill(Color.white.opacity(0.2))
+                        .fill(Color("FplSurface"))
                         .frame(height: 8)
                         .cornerRadius(4)
                     
@@ -875,7 +875,7 @@ struct EnhancedPerformanceBar: View {
             
             Text(description)
                 .font(.caption2)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
         }
     }
 }

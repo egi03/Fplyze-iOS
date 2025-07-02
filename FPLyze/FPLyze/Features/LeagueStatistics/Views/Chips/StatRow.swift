@@ -15,13 +15,13 @@ struct StatRow: View {
     var body: some View {
         HStack {
             Text(title)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
             Spacer()
             Text(value)
                 .fontWeight(.semibold)
         }
         .padding()
-        .background(Color.gray.opacity(0.1))
+        .background(Color("FplSurface"))
         .cornerRadius(10)
     }
 }

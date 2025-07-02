@@ -88,30 +88,12 @@ struct LeagueStatisticsView: View {
         }
     }
     
-    private var backgroundGradient: some View {
-        LinearGradient(
-            colors: [
-                Color("FplPrimary"),
-                Color("FplSecondary").opacity(animateGradient ? 0.8 : 0.6),
-                Color("FplPrimary")
-            ],
-            startPoint: .topLeading,
-            endPoint: animateGradient ? .bottomTrailing : .bottomLeading
-        )
-        .ignoresSafeArea()
-        .onAppear {
-            withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
-                animateGradient.toggle()
-            }
-        }
-    }
-    
     private var loadingView: some View {
         VStack(spacing: 30) {
             // Custom Loading Animation
             ZStack {
                 Circle()
-                    .stroke(Color.white.opacity(0.3), lineWidth: 4)
+                    .stroke(Color("FplSurface"), lineWidth: 4)
                     .frame(width: 100, height: 100)
                 
                 Circle()
@@ -166,7 +148,7 @@ struct LeagueStatisticsView: View {
             
             Text(error)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
                 .padding(.horizontal)
             
             HStack(spacing: 20) {
@@ -181,28 +163,10 @@ struct LeagueStatisticsView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                
-                // Debug button
-                Button(action: {
-                    Task {
-                        do {
-                            let rawData = try await FPLAPIService.shared.debugLeagueData(leagueId: leagueId)
-                            print("Debug data fetched - check console")
-                        } catch {
-                            print("Debug fetch failed: \(error)")
-                        }
-                    }
-                }) {
-                    Label("Debug", systemImage: "ladybug")
-                        .padding()
-                        .background(Color.orange)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
             }
         }
         .padding()
-        .background(Color("FplCardBackground"))
+        .background(Color("FplSurface"))
         .cornerRadius(20)
         .shadow(radius: 10)
         .padding()
@@ -282,7 +246,7 @@ struct StatisticsTabBar: View {
             }
             .padding()
         }
-        .background(Color("FplCardBackground"))
+        .background(Color("FplBackground"))
         .shadow(color: .black.opacity(0.1), radius: 5, y: 5)
     }
 }

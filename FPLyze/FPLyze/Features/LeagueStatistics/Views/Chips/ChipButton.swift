@@ -33,7 +33,7 @@ struct ChipButton: View {
                 if count > 0 {
                     Text("(\(count))")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("FplTextSecondary"))
                 }
             }
             .foregroundColor(isSelected ? chip.color : .primary)

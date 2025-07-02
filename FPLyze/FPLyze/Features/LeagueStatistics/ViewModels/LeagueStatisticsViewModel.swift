@@ -117,14 +117,6 @@ class LeagueStatisticsViewModel: ObservableObject {
             self.statistics = stats
             self.state = .loaded
             
-            // Update recent search with league name if available
-            if let firstMember = stats.members.first {
-                preferences.addRecentSearch(
-                    leagueId: leagueId,
-                    name: stats.leagueName
-                )
-            }
-            
         } catch {
             self.state = .error(error)
         }

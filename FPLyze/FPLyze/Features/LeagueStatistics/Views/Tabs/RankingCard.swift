@@ -60,7 +60,7 @@ var body: some View {
                 .font(.headline)
             Text(statistics.managerName)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
         }
         
         Spacer()
@@ -73,15 +73,11 @@ var body: some View {
                 .foregroundColor(Color("FplPrimary"))
             Text(sortType.unit)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("FplTextSecondary"))
         }
     }
     .padding()
-    .background(
-        RoundedRectangle(cornerRadius: 15)
-            .fill(Color.white)
-            .shadow(color: isSelected ? Color("FplAccent") : .clear, radius: 5)
-    )
+    .background(Color("FplBackground"))
     .overlay(
         RoundedRectangle(cornerRadius: 15)
             .stroke(isSelected ? Color("FplAccent") : .clear, lineWidth: 2)
