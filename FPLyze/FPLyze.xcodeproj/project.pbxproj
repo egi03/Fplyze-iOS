@@ -33,7 +33,7 @@
 		E4427FFE2E074E4800997924 /* Exceptions for "FPLyze" folder in "FPLyze" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				App/Info.plist,
 			);
 			target = E45090842DFF0ACB001B6DEC /* FPLyze */;
 		};
