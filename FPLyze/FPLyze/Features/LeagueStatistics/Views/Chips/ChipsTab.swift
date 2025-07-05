@@ -636,7 +636,40 @@ struct EnhancedChipUsageCard: View {
     let onTap: () -> Void
     
     var effectiveness: ChipEffectiveness {
-        let ratio = Double(usage.points) / averageScore
+        let baseScore: Double
+        
+        switch chipType {
+        case .tripleCaptain:
+            // For triple captain, use captain points for evaluation if available
+            if let captainPoints = usage.captainPoints {
+                baseScore = Double(captainPoints)
+                let avgCaptainScore = averageScore * 0.25 // Estimate captain contribution
+                let ratio = baseScore / avgCaptainScore
+                
+                if ratio > 2.0 { return .excellent }
+                else if ratio > 1.5 { return .good }
+                else if ratio > 1.0 { return .average }
+                else { return .poor }
+            } else {
+                baseScore = Double(usage.points)
+            }
+        case .benchBoost:
+            if let benchPoints = usage.benchBoost {
+                baseScore = Double(benchPoints)
+                
+                if baseScore > 25 { return .excellent }
+                else if baseScore > 18 { return .good }
+                else if baseScore > 12 { return .average }
+                else { return .poor }
+            } else {
+                baseScore = Double(usage.points)
+            }
+        default:
+            baseScore = Double(usage.points)
+        }
+        
+        // Default evaluation for other chips or fallback
+        let ratio = baseScore / averageScore
         
         if ratio > 1.3 { return .excellent }
         else if ratio > 1.0 { return .good }
@@ -645,25 +678,69 @@ struct EnhancedChipUsageCard: View {
     }
     
     var performanceMessage: String {
-        switch effectiveness {
-        case .excellent:
-            return "🔥 Way above average!"
-        case .good:
-            return "✅ Above average"
-        case .average:
-            return "📊 Around average"
-        case .poor:
-            return "😔 Below average"
+        switch chipType {
+        case .tripleCaptain:
+            if let captainName = usage.captainName,
+               let captainPoints = usage.captainPoints {
+                return "\(captainName): \(captainPoints) pts × 3"
+            } else {
+                return "Triple captain activated"
+            }
+        case .benchBoost:
+            if let benchPoints = usage.benchBoost {
+                return "Bench: +\(benchPoints) pts"
+            } else {
+                return "Bench boost activated"
+            }
+        default:
+            switch effectiveness {
+            case .excellent: return "🔥 Excellent timing!"
+            case .good: return "✅ Good usage"
+            case .average: return "📊 Average result"
+            case .poor: return "😔 Poor timing"
+            }
+        }
+    }
+    
+    var displayValue: (main: String, subtitle: String) {
+        switch chipType {
+        case .tripleCaptain:
+            if let captainPoints = usage.captainPoints {
+                return ("\(captainPoints)", "captain pts")
+            } else {
+                return ("\(usage.points)", "total pts")
+            }
+        case .benchBoost:
+            if let benchPoints = usage.benchBoost {
+                return ("\(benchPoints)", "bench pts")
+            } else {
+                return ("\(usage.points)", "total pts")
+            }
+        default:
+            return ("\(usage.points)", "total pts")
         }
     }
     
     var timingQuality: String {
-        // This would be better with actual gameweek average data
         switch chipType {
+        case .tripleCaptain:
+            if let captainPoints = usage.captainPoints {
+                if captainPoints >= 15 { return "Perfect captain choice!" }
+                else if captainPoints >= 10 { return "Good captain pick" }
+                else if captainPoints >= 6 { return "Decent captain" }
+                else { return "Captain let you down" }
+            } else {
+                return "Captain choice unknown"
+            }
         case .benchBoost:
-            if usage.benchBoost ?? 0 > 20 { return "Perfect timing!" }
-            else if usage.benchBoost ?? 0 > 15 { return "Good timing" }
-            else { return "Could be better" }
+            if let benchPoints = usage.benchBoost {
+                if benchPoints >= 25 { return "Amazing bench!" }
+                else if benchPoints >= 18 { return "Strong bench" }
+                else if benchPoints >= 12 { return "Decent bench" }
+                else { return "Weak bench" }
+            } else {
+                return "Bench boost timing"
+            }
         default:
             if usage.points > 80 { return "Excellent week!" }
             else if usage.points > 60 { return "Good choice" }
@@ -673,68 +750,144 @@ struct EnhancedChipUsageCard: View {
     
     var body: some View {
         Button(action: onTap) {
-            HStack {
-                // Rank indicator
-                VStack {
-                    Text("#\(chipUsage.firstIndex(where: { $0.1.id == usage.id }) ?? 0 + 1)")
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .foregroundColor(effectiveness.color)
-                }
-                .frame(width: 30)
-                
-                // Manager Info
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(member.entryName)
-                        .font(.headline)
-                        .foregroundColor(Color("FplTextPrimary"))
-                        .lineLimit(1)
-                    
-                    HStack(spacing: 8) {
-                        Label(member.playerName, systemImage: "person.fill")
+            VStack(spacing: 12) {
+                HStack {
+                    // Rank indicator
+                    VStack {
+                        Text("#\(1)") // This would need to be passed from parent for actual ranking
                             .font(.caption)
-                        
-                        Label("GW \(usage.event)", systemImage: "calendar")
-                            .font(.caption)
-                    }
-                    .foregroundColor(Color("FplTextSecondary"))
-                    
-                    Text(timingQuality)
-                        .font(.caption2)
-                        .foregroundColor(chipType.color)
-                }
-                
-                Spacer()
-                
-                // Points & Performance
-                VStack(alignment: .trailing, spacing: 6) {
-                    HStack(alignment: .bottom, spacing: 4) {
-                        Text("\(usage.points)")
-                            .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(effectiveness.color)
+                    }
+                    .frame(width: 30)
+                    
+                    // Manager Info
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(member.entryName)
+                            .font(.headline)
+                            .foregroundColor(Color("FplTextPrimary"))
+                            .lineLimit(1)
                         
-                        Text("pts")
-                            .font(.caption)
-                            .foregroundColor(Color("FplTextSecondary"))
-                            .padding(.bottom, 4)
+                        HStack(spacing: 8) {
+                            Label(member.playerName, systemImage: "person.fill")
+                                .font(.caption)
+                            
+                            Label("GW \(usage.event)", systemImage: "calendar")
+                                .font(.caption)
+                        }
+                        .foregroundColor(Color("FplTextSecondary"))
+                        
+                        Text(timingQuality)
+                            .font(.caption2)
+                            .foregroundColor(chipType.color)
                     }
                     
-                    Text(performanceMessage)
-                        .font(.caption)
-                        .foregroundColor(effectiveness.color)
+                    Spacer()
                     
-                    // Effectiveness Badge
-                    Text(effectiveness.label)
-                        .font(.caption2)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(effectiveness.color.opacity(0.2))
-                        .foregroundColor(effectiveness.color)
-                        .cornerRadius(6)
+                    // Enhanced Points & Performance
+                    VStack(alignment: .trailing, spacing: 6) {
+                        HStack(alignment: .bottom, spacing: 4) {
+                            Text(displayValue.main)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(effectiveness.color)
+                            
+                            Text(displayValue.subtitle)
+                                .font(.caption)
+                                .foregroundColor(Color("FplTextSecondary"))
+                                .padding(.bottom, 4)
+                        }
+                        
+                        Text(performanceMessage)
+                            .font(.caption)
+                            .foregroundColor(effectiveness.color)
+                            .multilineTextAlignment(.trailing)
+                        
+                        // Effectiveness Badge
+                        Text(effectiveness.label)
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(effectiveness.color.opacity(0.2))
+                            .foregroundColor(effectiveness.color)
+                            .cornerRadius(6)
+                    }
+                }
+                
+                // Enhanced context for triple captain
+                if chipType == .tripleCaptain {
+                    Divider()
+                    
+                    HStack {
+                        if let captainName = usage.captainName,
+                           let captainPoints = usage.captainPoints,
+                           let effectivePoints = usage.captainEffectivePoints {
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Captain Performance")
+                                    .font(.caption2)
+                                    .foregroundColor(Color("FplTextSecondary"))
+                                
+                                HStack {
+                                    Text(captainName)
+                                        .font(.caption)
+                                        .fontWeight(.medium)
+                                    
+                                    Spacer()
+                                    
+                                    Text("\(captainPoints) → \(effectivePoints) pts")
+                                        .font(.caption)
+                                        .foregroundColor(.orange)
+                                }
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text("Total GW")
+                                .font(.caption2)
+                                .foregroundColor(Color("FplTextSecondary"))
+                            
+                            Text("\(usage.points) pts")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                    }
+                }
+                
+                // Enhanced context for bench boost
+                if chipType == .benchBoost,
+                   let benchPoints = usage.benchBoost {
+                    Divider()
+                    
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Bench Contribution")
+                                .font(.caption2)
+                                .foregroundColor(Color("FplTextSecondary"))
+                            
+                            Text("\(benchPoints) pts added")
+                                .font(.caption)
+                                .foregroundColor(.blue)
+                        }
+                        
+                        Spacer()
+                        
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text("Field + Bench")
+                                .font(.caption2)
+                                .foregroundColor(Color("FplTextSecondary"))
+                            
+                            Text("\(usage.points) pts total")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                        }
+                    }
                 }
             }
-            .padding()
+            .padding(.vertical, 12)
+            .padding(.horizontal, 12)
             .background(
                 RoundedRectangle(cornerRadius: 15)
                     .fill(Color.white)
@@ -742,11 +895,6 @@ struct EnhancedChipUsageCard: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
-    }
-    
-    var chipUsage: [(LeagueMember, ChipUsage)] {
-        // This is a workaround - in real implementation, pass this from parent
-        []
     }
 }
 

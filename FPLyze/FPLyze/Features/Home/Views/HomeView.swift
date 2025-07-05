@@ -20,37 +20,54 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color("FplBackground")
+                // Gradient background
+                LinearGradient(
+                    colors: [
+                        Color("FplPrimary").opacity(0.15),
+                        Color("FplBackground")
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
                 .ignoresSafeArea()
-                
-                VStack {
-                    LinearGradient(
-                        colors: [
-                            Color("FplPrimary").opacity(0.1),
-                            Color("FplBackground")
-                        ], startPoint: .top, endPoint: .bottom
-                    )
-                    .frame(height: 300)
-                    .ignoresSafeArea()
-                    Spacer()
-                }
                 
                 ScrollView {
                     VStack(spacing: 40) {
                         // Logo and Title
                         VStack(spacing: 20) {
-                            Image(systemName: "chart.bar.fill")
-                                .font(.system(size: 80))
-                                .foregroundColor(.white)
-                                .shadow(color: .black.opacity(0.2), radius: 10)
+                            ZStack {
+                                Circle()
+                                    .fill(Color.white.opacity(0.2))
+                                    .frame(width: 120, height: 120)
+                                    .blur(radius: 20)
+                                
+                                Image(systemName: "chart.bar.fill")
+                                    .font(.system(size: 80))
+                                    .foregroundStyle(
+                                        LinearGradient(
+                                            colors: [Color("FplPrimary"), Color("FplAccent")],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .shadow(color: Color("FplPrimary").opacity(0.3), radius: 10, x: 0, y: 5)
+                            }
                             
-                            Text("FPL.stats")
-                                .font(.system(size: 50, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            
-                            Text("Fantasy Premier League Statistics")
-                                .font(.headline)
-                                .foregroundColor(.white.opacity(0.9))
+                            VStack(spacing: 8) {
+                                Text("FPL.stats")
+                                    .font(.system(size: 50, weight: .bold, design: .rounded))
+                                    .foregroundStyle(
+                                        LinearGradient(
+                                            colors: [Color("FplPrimary"), Color("FplAccent")],
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                    )
+                                
+                                Text("Fantasy Premier League Statistics")
+                                    .font(.headline)
+                                    .foregroundColor(Color("FplTextSecondary"))
+                            }
                         }
                         .padding(.top, 60)
                         
@@ -58,27 +75,33 @@ struct HomeView: View {
                         VStack(spacing: 20) {
                             Text("Enter your league ID")
                                 .font(.title3)
-                                .foregroundColor(.white)
+                                .fontWeight(.medium)
+                                .foregroundColor(Color("FplTextPrimary"))
                             
                             // Search Bar
                             HStack {
                                 Image(systemName: "magnifyingglass")
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(Color("FplTextSecondary"))
                                     .font(.title2)
                                 
                                 TextField("League ID", text: $leagueId)
                                     .keyboardType(.numberPad)
                                     .textFieldStyle(PlainTextFieldStyle())
                                     .font(.title3)
+                                    .foregroundColor(Color("FplTextPrimary"))
                                     .focused($isSearchFocused)
                                     .onSubmit {
                                         searchLeague()
                                     }
                             }
                             .padding()
-                            .background(Color.white)
+                            .background(Color("FplSurface"))
                             .cornerRadius(15)
-                            .shadow(color: .black.opacity(0.2), radius: 10)
+                            .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color("FplPrimary").opacity(0.3), lineWidth: 1)
+                            )
                             .frame(maxWidth: 350)
                             
                             // Search Button
@@ -94,16 +117,17 @@ struct HomeView: View {
                                 .padding(.vertical, 15)
                                 .background(
                                     LinearGradient(
-                                        colors: [Color("FplAccent"), Color("FplAccent").opacity(0.8)],
+                                        colors: leagueId.isEmpty ?
+                                            [Color("FplSecondary"), Color("FplSecondary").opacity(0.8)] :
+                                            [Color("FplAccent"), Color("FplAccent").opacity(0.8)],
                                         startPoint: .leading,
                                         endPoint: .trailing
                                     )
                                 )
                                 .cornerRadius(30)
-                                .shadow(color: Color("FplAccent").opacity(0.3), radius: 10)
+                                .shadow(color: leagueId.isEmpty ? Color.clear : Color("FplAccent").opacity(0.3), radius: 10, x: 0, y: 5)
                             }
                             .disabled(leagueId.isEmpty)
-                            .opacity(leagueId.isEmpty ? 0.6 : 1.0)
                             .scaleEffect(leagueId.isEmpty ? 0.95 : 1.0)
                             .animation(.spring(response: 0.3), value: leagueId.isEmpty)
                         }
@@ -114,21 +138,21 @@ struct HomeView: View {
                             VStack(alignment: .leading, spacing: 16) {
                                 HStack {
                                     Image(systemName: "star.fill")
-                                        .foregroundColor(.yellow)
+                                        .foregroundColor(Color("FplAccent"))
                                     
                                     Text("Favorite Leagues")
                                         .font(.title2)
                                         .fontWeight(.bold)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color("FplTextPrimary"))
                                     
                                     Spacer()
                                     
                                     Text("\(preferences.favoriteLeagues.count)")
                                         .font(.caption)
-                                        .foregroundColor(.white.opacity(0.8))
+                                        .foregroundColor(Color("FplTextSecondary"))
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 4)
-                                        .background(Color("FplSurface"))
+                                        .background(Color("FplPrimary").opacity(0.1))
                                         .clipShape(Capsule())
                                 }
                                 .padding(.horizontal)
@@ -148,22 +172,23 @@ struct HomeView: View {
                                     .padding(.horizontal)
                                 }
                             }
-                            .padding(.vertical)
+                            .padding(.vertical, 20)
                             .background(Color("FplSurface"))
                             .cornerRadius(20)
+                            .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
                             .padding(.horizontal)
                         }
                         
-                        // Recent Searches Section (Optional)
+                        // Recent Searches Section
                         if !preferences.recentSearches.isEmpty {
                             VStack(alignment: .leading, spacing: 16) {
                                 HStack {
                                     Image(systemName: "clock.arrow.circlepath")
-                                        .foregroundColor(.white.opacity(0.8))
+                                        .foregroundColor(Color("FplPrimary"))
                                     
                                     Text("Recent Searches")
                                         .font(.headline)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(Color("FplTextPrimary"))
                                     
                                     Spacer()
                                     
@@ -172,7 +197,7 @@ struct HomeView: View {
                                     }) {
                                         Text("Clear")
                                             .font(.caption)
-                                            .foregroundColor(.white.opacity(0.8))
+                                            .foregroundColor(Color("FplAccent"))
                                     }
                                 }
                                 .padding(.horizontal)
@@ -190,9 +215,10 @@ struct HomeView: View {
                                 }
                                 .padding(.horizontal)
                             }
-                            .padding(.vertical)
+                            .padding(.vertical, 20)
                             .background(Color("FplSurface"))
                             .cornerRadius(20)
+                            .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
                             .padding(.horizontal)
                         }
                         
@@ -203,13 +229,17 @@ struct HomeView: View {
                             Text("How to find your league ID:")
                                 .font(.caption)
                                 .fontWeight(.semibold)
-                                .foregroundColor(.white)
+                                .foregroundColor(Color("FplTextPrimary"))
                             
                             Text("Go to your league page on fantasy.premierleague.com\nThe ID is in the URL: /leagues/[ID]/standings")
                                 .font(.caption2)
                                 .multilineTextAlignment(.center)
-                                .foregroundColor(.white.opacity(0.8))
+                                .foregroundColor(Color("FplTextSecondary"))
                         }
+                        .padding()
+                        .background(Color("FplSurface").opacity(0.8))
+                        .cornerRadius(12)
+                        .padding(.horizontal, 40)
                         .padding(.bottom, 40)
                     }
                 }
@@ -253,5 +283,8 @@ struct HomeView: View {
         selectedFavoriteLeagueId = nil
         navigateToLeague = true
     }
-    
+}
+
+#Preview {
+    HomeView()
 }

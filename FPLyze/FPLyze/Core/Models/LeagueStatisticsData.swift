@@ -5,7 +5,6 @@
 //  Created by Eugen Sedlar on 21.06.2025..
 //
 
-
 import Foundation
 
 struct LeagueStatisticsData {
@@ -17,6 +16,8 @@ struct LeagueStatisticsData {
     let members: [LeagueMember]
     let missedPlayerAnalyses: [MissedPlayerAnalysis]
     let underperformerAnalyses: [UnderperformerAnalysis]
+    let differentialAnalyses: [DifferentialAnalysis]
+    let whatIfScenarios: [WhatIfScenario]
     
     init(
         leagueId: Int,
@@ -26,7 +27,9 @@ struct LeagueStatisticsData {
         headToHeadStatistics: [HeadToHeadRecord],
         members: [LeagueMember],
         missedPlayerAnalyses: [MissedPlayerAnalysis] = [],
-        underperformerAnalyses: [UnderperformerAnalysis] = []
+        underperformerAnalyses: [UnderperformerAnalysis] = [],
+        differentialAnalyses: [DifferentialAnalysis] = [],
+        whatIfScenarios: [WhatIfScenario] = []
     ) {
         self.leagueId = leagueId
         self.leagueName = leagueName
@@ -36,5 +39,26 @@ struct LeagueStatisticsData {
         self.members = members
         self.missedPlayerAnalyses = missedPlayerAnalyses
         self.underperformerAnalyses = underperformerAnalyses
+        self.differentialAnalyses = differentialAnalyses
+        self.whatIfScenarios = whatIfScenarios
+    }
+    
+    // Convenience computed properties
+    var hasAdvancedAnalysis: Bool {
+        !differentialAnalyses.isEmpty || !whatIfScenarios.isEmpty
+    }
+    
+    var totalDifferentials: Int {
+        differentialAnalyses.map { $0.differentialPicks.count }.reduce(0, +)
+    }
+    
+    var averageDifferentialSuccessRate: Double {
+        guard !differentialAnalyses.isEmpty else { return 0 }
+        let totalSuccessRate = differentialAnalyses.map { $0.differentialSuccessRate }.reduce(0, +)
+        return totalSuccessRate / Double(differentialAnalyses.count)
+    }
+    
+    var mostVolatileScenario: WhatIfScenario? {
+        whatIfScenarios.max { $0.impact.averageRankChange < $1.impact.averageRankChange }
     }
 }

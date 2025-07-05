@@ -79,9 +79,42 @@ struct ChipUsage: Identifiable, Codable {
     let points: Int
     let benchBoost: Int?
     let fieldPoints: Int?
+    // Enhanced for triple captain
+    let captainName: String?
+    let captainPoints: Int?
+    let captainEffectivePoints: Int?
     
     var chipType: ChipType? {
         ChipType(rawValue: name)
+    }
+    
+    // Custom initializer for backward compatibility
+    init(name: String, event: Int, points: Int, benchBoost: Int? = nil, fieldPoints: Int? = nil, captainName: String? = nil, captainPoints: Int? = nil, captainEffectivePoints: Int? = nil) {
+        self.name = name
+        self.event = event
+        self.points = points
+        self.benchBoost = benchBoost
+        self.fieldPoints = fieldPoints
+        self.captainName = captainName
+        self.captainPoints = captainPoints
+        self.captainEffectivePoints = captainEffectivePoints
+    }
+    
+    // Coding keys for backward compatibility
+    enum CodingKeys: String, CodingKey {
+        case name, event, points, benchBoost, fieldPoints, captainName, captainPoints, captainEffectivePoints
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        event = try container.decode(Int.self, forKey: .event)
+        points = try container.decode(Int.self, forKey: .points)
+        benchBoost = try container.decodeIfPresent(Int.self, forKey: .benchBoost)
+        fieldPoints = try container.decodeIfPresent(Int.self, forKey: .fieldPoints)
+        captainName = try container.decodeIfPresent(String.self, forKey: .captainName)
+        captainPoints = try container.decodeIfPresent(Int.self, forKey: .captainPoints)
+        captainEffectivePoints = try container.decodeIfPresent(Int.self, forKey: .captainEffectivePoints)
     }
 }
 
@@ -128,6 +161,9 @@ struct LeagueRecord: Identifiable {
     let entryName: String
     let gameweek: Int?
     let additionalInfo: String?
+    // Enhanced for triple captain
+    let captainName: String?
+    let captainActualPoints: Int?
 }
 
 enum RecordType: String, CaseIterable {
@@ -178,7 +214,6 @@ enum RecordType: String, CaseIterable {
     }
 }
 
-
 struct ManagerStatistics: Identifiable {
     let id: Int
     let managerId: Int
@@ -193,6 +228,30 @@ struct ManagerStatistics: Identifiable {
     let benchWaste: Double
     let chipsUsed: Int
     let totalTransfers: Int
+    
+    var consistencyDescription: String {
+        switch standardDeviation {
+        case 0..<5:
+            return "🎯 Very consistent - predictable scores"
+        case 5..<8:
+            return "✅ Consistent - steady performance"
+        case 8..<12:
+            return "📊 Moderate variation - some ups and downs"
+        case 12..<18:
+            return "🎢 Inconsistent - volatile scores"
+        default:
+            return "🎰 Very inconsistent - wildly unpredictable"
+        }
+    }
+    
+    var consistencyRating: String {
+        switch standardDeviation {
+        case 0..<8: return "Reliable"
+        case 8..<12: return "Steady"
+        case 12..<18: return "Variable"
+        default: return "Volatile"
+        }
+    }
 }
 
 struct StreakInfo {

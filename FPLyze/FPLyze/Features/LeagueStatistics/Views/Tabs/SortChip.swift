@@ -20,7 +20,7 @@ struct SortChip: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(Color("FplBackground"))
-                .foregroundColor(isSelected ? .white : .primary)
+                .foregroundColor(isSelected ?  Color("FplPrimary") : Color("FplSecondary"))
         }
     }
 }

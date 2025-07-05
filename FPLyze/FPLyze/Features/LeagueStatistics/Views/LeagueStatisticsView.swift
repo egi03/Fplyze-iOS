@@ -86,14 +86,14 @@ struct LeagueStatisticsView: View {
             // Custom Loading Animation
             ZStack {
                 Circle()
-                    .stroke(Color("FplSurface"), lineWidth: 4)
+                    .stroke(Color("FplDivider"), lineWidth: 4)
                     .frame(width: 100, height: 100)
                 
                 Circle()
                     .trim(from: 0, to: viewModel.loadingProgress)
                     .stroke(
                         LinearGradient(
-                            colors: [Color.white, Color("FplAccent")],
+                            colors: [Color("FplPrimary"), Color("FplAccent")],
                             startPoint: .leading,
                             endPoint: .trailing
                         ),
@@ -106,25 +106,29 @@ struct LeagueStatisticsView: View {
                 Text("\(Int(viewModel.loadingProgress * 100))%")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color("FplTextPrimary"))
             }
             
             VStack(spacing: 8) {
                 Text(viewModel.loadingMessage)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color("FplTextPrimary"))
                     .font(.headline)
                     .animation(.easeInOut, value: viewModel.loadingMessage)
                 
                 Text("League ID: \(leagueId)")
-                    .foregroundColor(.white.opacity(0.8))
+                    .foregroundColor(Color("FplTextSecondary"))
                     .font(.caption)
             }
         }
-        .padding()
+        .padding(40)
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color.black.opacity(0.3))
-                .blur(radius: 20)
+                .fill(Color("FplCardBackground"))
+                .shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 10)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color("FplDivider"), lineWidth: 1)
         )
     }
     
@@ -193,6 +197,12 @@ struct LeagueStatisticsView: View {
                     underperformerAnalyses: statistics.underperformerAnalyses
                 )
                 .tag(StatisticsTab.playerAnalysis)
+                
+                DifferentialAnalysisTab(analyses: statistics.differentialAnalyses)
+                    .tag(StatisticsTab.differentials)
+                
+                WhatIfScenariosTab(scenarios: statistics.whatIfScenarios)
+                    .tag(StatisticsTab.whatIf)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(.easeInOut, value: viewModel.selectedTab)
@@ -219,7 +229,7 @@ struct LeagueStatisticsView: View {
     }
 }
 
-// MARK: - Enhanced Tab Bar
+// MARK: - Statistics tab bar
 struct StatisticsTabBar: View {
     @Binding var selectedTab: StatisticsTab
     let onTabSelected: (StatisticsTab) -> Void
@@ -227,9 +237,9 @@ struct StatisticsTabBar: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20){
+            HStack(spacing: 16){
                 ForEach(StatisticsTab.allCases, id: \.self) { tab in
-                    TabButton(
+                    EnhancedTabButton(
                         tab: tab,
                         isSelected: selectedTab == tab,
                         namespace: animation,
@@ -237,10 +247,72 @@ struct StatisticsTabBar: View {
                     )
                 }
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
         .background(Color("FplBackground"))
         .shadow(color: .black.opacity(0.1), radius: 5, y: 5)
+    }
+}
+
+struct EnhancedTabButton: View {
+    let tab: StatisticsTab
+    let isSelected: Bool
+    let namespace: Namespace.ID
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                ZStack {
+                    Circle()
+                        .fill(isSelected ? Color("FplPrimary") : Color.clear)
+                        .frame(width: 40, height: 40)
+                    
+                    Image(systemName: tab.icon)
+                        .font(.title3)
+                        .foregroundColor(isSelected ? .white : Color("FplTextSecondary"))
+                        .symbolEffect(.bounce, value: isSelected)
+                }
+                
+                Text(tab.rawValue)
+                    .font(.caption2)
+                    .fontWeight(isSelected ? .semibold : .regular)
+                    .foregroundColor(isSelected ? Color("FplPrimary") : Color("FplTextSecondary"))
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
+            }
+            .frame(minWidth: 60)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 8)
+            .background(
+                ZStack {
+                    if isSelected {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color("FplPrimary").opacity(0.1))
+                            .matchedGeometryEffect(id: "tab_background", in: namespace)
+                    }
+                }
+            )
+        }
+        .animation(.spring(response: 0.3), value: isSelected)
+    }
+}
+
+struct TabBadge: View {
+    let text: String
+    let color: Color
+    
+    var body: some View {
+        Text(text)
+            .font(.caption2)
+            .fontWeight(.bold)
+            .foregroundColor(.white)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(color)
+            .clipShape(Capsule())
+            .scaleEffect(0.8)
     }
 }
 
@@ -261,14 +333,14 @@ struct TabButton: View {
                     .font(.caption)
                     .fontWeight(isSelected ? .bold : .regular)
             }
-            .foregroundColor(isSelected ? Color("FplPrimary") : .gray)
+            .foregroundColor(isSelected ? Color("FplPrimary") : Color("FplTextSecondary"))
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
             .background(
                 ZStack {
                     if isSelected {
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color("FplAccent").opacity(0.2))
+                            .fill(Color("FplPrimary").opacity(0.1))
                             .matchedGeometryEffect(id: "tab", in: namespace)
                     }
                 }

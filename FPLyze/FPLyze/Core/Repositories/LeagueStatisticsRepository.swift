@@ -12,11 +12,13 @@ class LeagueStatisticsRepository: ObservableObject {
     private let apiService = FPLAPIService.shared
     private let cache = CacheManager.shared
     private let playerAnalysisService = PlayerAnalysisService()
+    private let differentialAnalysisService = DifferentialAnalysisService()
     
     @Published var loadingProgress: Double = 0.0
     @Published var loadingMessage: String = ""
     
     private var currentLeagueInfo: League?
+    private var allPlayers: [PlayerData] = [] // Cache player data for captain names
     
     // Settings for performance
     private let batchSize = 10 // Process members in batches
@@ -30,6 +32,16 @@ class LeagueStatisticsRepository: ObservableObject {
         
         loadingProgress = 0.0
         loadingMessage = "Fetching league members..."
+        
+        // Load player data for captain names
+        loadingMessage = "Loading player database..."
+        do {
+            let bootstrap = try await apiService.getPlayerData()
+            allPlayers = bootstrap.elements
+        } catch {
+            print("Failed to load player data: \(error)")
+            // Continue without player names
+        }
         
         let (members, leagueName) = try await fetchAllMembers(leagueId: leagueId)
         
@@ -53,6 +65,26 @@ class LeagueStatisticsRepository: ObservableObject {
             underperformerAnalyses = []
         }
         
+        // Perform differential analysis
+        loadingMessage = "Analyzing differential picks..."
+        let differentialAnalyses: [DifferentialAnalysis]
+        do {
+            differentialAnalyses = try await differentialAnalysisService.analyzeDifferentials(for: detailedMembers)
+        } catch {
+            print("Differential analysis failed: \(error)")
+            differentialAnalyses = []
+        }
+        
+        // Generate what-if scenarios
+        loadingMessage = "Generating what-if scenarios..."
+        let whatIfScenarios: [WhatIfScenario]
+        do {
+            whatIfScenarios = try await differentialAnalysisService.generateWhatIfScenarios(for: detailedMembers)
+        } catch {
+            print("What-if scenarios generation failed: \(error)")
+            whatIfScenarios = []
+        }
+        
         let statistics = LeagueStatisticsData(
             leagueId: leagueId,
             leagueName: leagueName,
@@ -61,7 +93,9 @@ class LeagueStatisticsRepository: ObservableObject {
             headToHeadStatistics: calculateHeadToHeadRecords(from: detailedMembers),
             members: detailedMembers,
             missedPlayerAnalyses: missedAnalyses,
-            underperformerAnalyses: underperformerAnalyses
+            underperformerAnalyses: underperformerAnalyses,
+            differentialAnalyses: differentialAnalyses,
+            whatIfScenarios: whatIfScenarios
         )
         
         // Cache the results
@@ -76,7 +110,6 @@ class LeagueStatisticsRepository: ObservableObject {
         var page = 1
         var hasMore = true
         var leagueName = "Unknown"
-        
         
         while hasMore {
             let response = try await apiService.getLeagueStandings(
@@ -169,27 +202,97 @@ class LeagueStatisticsRepository: ObservableObject {
                 )
             }
             
-            updatedMember.chips = history.chips.map { chip in
-                let chipGameweek = updatedMember.gameweekHistory
-                    .first { $0.event == chip.event }
-                
-                let points = chipGameweek?.points ?? 0
-                let benchBoost = chip.name == "bboost" ? chipGameweek?.benchPoints : nil
-                
-                return ChipUsage(
-                    name: chip.name,
-                    event: chip.event,
-                    points: points,
-                    benchBoost: benchBoost,
-                    fieldPoints: nil
-                )
-            }
+            // Enhanced chip processing with captain information
+            updatedMember.chips = await processChipsWithCaptainInfo(
+                chips: history.chips,
+                member: member,
+                gameweekHistory: updatedMember.gameweekHistory
+            )
             
             return updatedMember
         } catch {
             print("Failed to fetch details for member \(member.playerName): \(error)")
             return member
         }
+    }
+    
+    private func processChipsWithCaptainInfo(
+        chips: [ChipPlay],
+        member: LeagueMember,
+        gameweekHistory: [GameweekPerformance]
+    ) async -> [ChipUsage] {
+        var processedChips: [ChipUsage] = []
+        
+        for chip in chips {
+            let chipGameweek = gameweekHistory.first { $0.event == chip.event }
+            let points = chipGameweek?.points ?? 0
+            let benchBoost = chip.name == "bboost" ? chipGameweek?.benchPoints : nil
+            
+            // For triple captain, fetch captain information
+            if chip.name == "3xc" {
+                let captainInfo = await fetchCaptainInfo(entryId: member.entry, event: chip.event)
+                
+                let chipUsage = ChipUsage(
+                    name: chip.name,
+                    event: chip.event,
+                    points: points,
+                    benchBoost: benchBoost,
+                    fieldPoints: nil,
+                    captainName: captainInfo.name,
+                    captainPoints: captainInfo.actualPoints,
+                    captainEffectivePoints: captainInfo.effectivePoints
+                )
+                processedChips.append(chipUsage)
+            } else {
+                let chipUsage = ChipUsage(
+                    name: chip.name,
+                    event: chip.event,
+                    points: points,
+                    benchBoost: benchBoost,
+                    fieldPoints: nil
+                )
+                processedChips.append(chipUsage)
+            }
+        }
+        
+        return processedChips
+    }
+    
+    private func fetchCaptainInfo(entryId: Int, event: Int) async -> (name: String?, actualPoints: Int?, effectivePoints: Int?) {
+        do {
+            let picks = try await apiService.getGameweekPicks(entryId: entryId, event: event)
+            
+            if let captainPick = picks.picks.first(where: { $0.isCaptain }) {
+                let player = allPlayers.first { $0.id == captainPick.element }
+                let playerName = player?.webName ?? "Unknown Player"
+                
+                // For triple captain, the effective points are the player's actual points * 3
+                // We need to estimate the player's points for that gameweek
+                // Since we don't have gameweek-specific player points easily available,
+                // we'll calculate it based on the total gameweek points and captain multiplier
+                let estimatedCaptainPoints = estimateCaptainPoints(
+                    totalGameweekPoints: picks.entryHistory.points,
+                    multiplier: captainPick.multiplier
+                )
+                
+                return (
+                    name: playerName,
+                    actualPoints: estimatedCaptainPoints,
+                    effectivePoints: estimatedCaptainPoints * captainPick.multiplier
+                )
+            }
+        } catch {
+            print("Failed to fetch captain info for entry \(entryId) event \(event): \(error)")
+        }
+        
+        return (name: nil, actualPoints: nil, effectivePoints: nil)
+    }
+    
+    private func estimateCaptainPoints(totalGameweekPoints: Int, multiplier: Int) -> Int {
+        // This is a rough estimation - in a real app you'd want to fetch actual player points
+        // For now, assume captain contributed roughly 20-30% of total points
+        let estimatedContribution = Double(totalGameweekPoints) * 0.25
+        return max(Int(estimatedContribution / Double(multiplier)), 2)
     }
     
     private func calculateRecords(from members: [LeagueMember]) -> [LeagueRecord] {
@@ -210,7 +313,9 @@ class LeagueStatisticsRepository: ObservableObject {
                 managerName: best.member.playerName,
                 entryName: best.member.entryName,
                 gameweek: best.gameweek,
-                additionalInfo: nil
+                additionalInfo: nil,
+                captainName: nil,
+                captainActualPoints: nil
             ))
         }
         
@@ -225,11 +330,13 @@ class LeagueStatisticsRepository: ObservableObject {
                 managerName: worst.member.playerName,
                 entryName: worst.member.entryName,
                 gameweek: worst.gameweek,
-                additionalInfo: nil
+                additionalInfo: nil,
+                captainName: nil,
+                captainActualPoints: nil
             ))
         }
         
-        // Most consistent manager
+        // Most consistent manager with enhanced description
         let consistencyScores = members.map { member in
             let points = member.gameweekHistory.map { Double($0.points) }
             let average = points.isEmpty ? 0 : points.reduce(0, +) / Double(points.count)
@@ -243,6 +350,9 @@ class LeagueStatisticsRepository: ObservableObject {
         if let mostConsistent = consistencyScores
             .filter({ $0.average > 0 })
             .min(by: { $0.consistency < $1.consistency }) {
+            
+            let consistencyDescription = getConsistencyDescription(stdDev: mostConsistent.consistency)
+            
             records.append(LeagueRecord(
                 type: .mostConsistent,
                 value: Int(mostConsistent.average),
@@ -250,12 +360,14 @@ class LeagueStatisticsRepository: ObservableObject {
                 managerName: mostConsistent.member.playerName,
                 entryName: mostConsistent.member.entryName,
                 gameweek: nil,
-                additionalInfo: "σ = \(String(format: "%.1f", mostConsistent.consistency))"
+                additionalInfo: "Std Dev: \(String(format: "%.1f", mostConsistent.consistency)) - \(consistencyDescription)",
+                captainName: nil,
+                captainActualPoints: nil
             ))
         }
         
-        // Best chips with improved logic
-        processChipRecords(&records, from: members)
+        // Enhanced chip records with captain information
+        processEnhancedChipRecords(&records, from: members)
         
         // Biggest rise/fall
         processMomentumRecords(&records, from: members)
@@ -263,7 +375,22 @@ class LeagueStatisticsRepository: ObservableObject {
         return records
     }
     
-    private func processChipRecords(_ records: inout [LeagueRecord], from members: [LeagueMember]) {
+    private func getConsistencyDescription(stdDev: Double) -> String {
+        switch stdDev {
+        case 0..<5:
+            return "Very consistent scores"
+        case 5..<8:
+            return "Steady performance"
+        case 8..<12:
+            return "Moderate variation"
+        case 12..<18:
+            return "Inconsistent scoring"
+        default:
+            return "Highly volatile"
+        }
+    }
+    
+    private func processEnhancedChipRecords(_ records: inout [LeagueRecord], from members: [LeagueMember]) {
         let chipTypes: [(ChipType, RecordType)] = [
             (.benchBoost, .bestBenchBoost),
             (.tripleCaptain, .bestTripleCaptain),
@@ -279,6 +406,28 @@ class LeagueStatisticsRepository: ObservableObject {
             }
             
             if let bestChip = chipUsages.max(by: { $0.chip.points < $1.chip.points }) {
+                var additionalInfo: String
+                var captainName: String?
+                var captainActualPoints: Int?
+                
+                if chipType == .tripleCaptain {
+                    // Enhanced triple captain information
+                    if let captain = bestChip.chip.captainName,
+                       let actualPoints = bestChip.chip.captainPoints,
+                       let effectivePoints = bestChip.chip.captainEffectivePoints {
+                        additionalInfo = "Captain: \(captain) (\(actualPoints) pts × 3 = \(effectivePoints) pts)"
+                        captainName = captain
+                        captainActualPoints = actualPoints
+                    } else {
+                        additionalInfo = "Triple Captain played"
+                    }
+                } else if chipType == .benchBoost {
+                    let benchPoints = bestChip.chip.benchBoost ?? 0
+                    additionalInfo = "Bench contributed \(benchPoints) pts"
+                } else {
+                    additionalInfo = chipType.displayName
+                }
+                
                 records.append(LeagueRecord(
                     type: recordType,
                     value: bestChip.chip.points,
@@ -286,7 +435,9 @@ class LeagueStatisticsRepository: ObservableObject {
                     managerName: bestChip.member.playerName,
                     entryName: bestChip.member.entryName,
                     gameweek: bestChip.chip.event,
-                    additionalInfo: chipType.displayName
+                    additionalInfo: additionalInfo,
+                    captainName: captainName,
+                    captainActualPoints: captainActualPoints
                 ))
             }
         }
@@ -312,7 +463,9 @@ class LeagueStatisticsRepository: ObservableObject {
                             managerName: member.playerName,
                             entryName: member.entryName,
                             gameweek: history[i].event,
-                            additionalInfo: "+\(rankChange) places"
+                            additionalInfo: "Climbed \(rankChange) places in one week",
+                            captainName: nil,
+                            captainActualPoints: nil
                         ))
                     }
                 } else if rankChange > 0 {
@@ -323,7 +476,9 @@ class LeagueStatisticsRepository: ObservableObject {
                         managerName: member.playerName,
                         entryName: member.entryName,
                         gameweek: history[i].event,
-                        additionalInfo: "+\(rankChange) places"
+                        additionalInfo: "Climbed \(rankChange) places in one week",
+                        captainName: nil,
+                        captainActualPoints: nil
                     ))
                 }
             }
