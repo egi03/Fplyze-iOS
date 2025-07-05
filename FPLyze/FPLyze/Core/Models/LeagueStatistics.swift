@@ -231,13 +231,13 @@ struct ManagerStatistics: Identifiable {
     
     var consistencyDescription: String {
         switch standardDeviation {
-        case 0..<5:
+        case 0..<10:
             return "🎯 Very consistent - predictable scores"
-        case 5..<8:
+        case 10..<15:
             return "✅ Consistent - steady performance"
-        case 8..<12:
+        case 15..<20:
             return "📊 Moderate variation - some ups and downs"
-        case 12..<18:
+        case 20..<25:
             return "🎢 Inconsistent - volatile scores"
         default:
             return "🎰 Very inconsistent - wildly unpredictable"

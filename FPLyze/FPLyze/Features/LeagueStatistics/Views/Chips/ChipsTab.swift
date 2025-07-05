@@ -460,19 +460,29 @@ struct ChipQualityDistribution: View {
         for (_, usage) in chipUsage {
             switch chipType {
             case .benchBoost:
-                if usage.points > 25 { dist["Excellent"]! += 1 }
-                else if usage.points > 18 { dist["Good"]! += 1 }
-                else if usage.points > 12 { dist["Average"]! += 1 }
+                let benchPoints = usage.benchBoost ?? 0
+                if benchPoints >= 25 { dist["Excellent"]! += 1 }
+                else if benchPoints >= 18 { dist["Good"]! += 1 }
+                else if benchPoints >= 12 { dist["Average"]! += 1 }
                 else { dist["Poor"]! += 1 }
             case .tripleCaptain:
-                if usage.points > 90 { dist["Excellent"]! += 1 }
-                else if usage.points > 60 { dist["Good"]! += 1 }
-                else if usage.points > 40 { dist["Average"]! += 1 }
-                else { dist["Poor"]! += 1 }
+
+                if let captainPoints = usage.captainPoints {
+                    if captainPoints >= 15 { dist["Excellent"]! += 1 }
+                    else if captainPoints >= 10 { dist["Good"]! += 1 }
+                    else if captainPoints >= 6 { dist["Average"]! += 1 }
+                    else { dist["Poor"]! += 1 }
+                } else {
+
+                    if usage.points >= 90 { dist["Excellent"]! += 1 }
+                    else if usage.points >= 60 { dist["Good"]! += 1 }
+                    else if usage.points >= 40 { dist["Average"]! += 1 }
+                    else { dist["Poor"]! += 1 }
+                }
             default:
-                if usage.points > 80 { dist["Excellent"]! += 1 }
-                else if usage.points > 60 { dist["Good"]! += 1 }
-                else if usage.points > 45 { dist["Average"]! += 1 }
+                if usage.points >= 80 { dist["Excellent"]! += 1 }
+                else if usage.points >= 60 { dist["Good"]! += 1 }
+                else if usage.points >= 45 { dist["Average"]! += 1 }
                 else { dist["Poor"]! += 1 }
             }
         }

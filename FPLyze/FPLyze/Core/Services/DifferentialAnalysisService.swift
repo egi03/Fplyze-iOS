@@ -2,8 +2,6 @@
 //  DifferentialAnalysisService.swift
 //  FPLyze
 //
-//  Created by Eugen Sedlar on 03.07.2025..
-//
 
 import Foundation
 
@@ -54,18 +52,17 @@ class DifferentialAnalysisService {
         leagueMembers: [LeagueMember]
     ) async -> DifferentialAnalysis {
         
-        // For demo purposes, we'll simulate differential analysis
-        // In a real implementation, you'd need to fetch actual team ownership data
-        
         var differentialPicks: [DifferentialPick] = []
         var missedOpportunities: [MissedDifferential] = []
         
-        // Simulate finding differential picks
-        let topPlayers = allPlayers.prefix(50)
-        let simulatedDifferentials = generateSimulatedDifferentials(
+        // Create deterministic but varied differentials based on member ID
+        let memberSeed = member.entry
+        let topPlayers = allPlayers.filter { $0.totalPoints > 50 }.sorted { $0.totalPoints > $1.totalPoints }.prefix(100)
+        let simulatedDifferentials = generateImprovedDifferentials(
             member: member,
             topPlayers: Array(topPlayers),
-            leagueSize: leagueMembers.count
+            leagueSize: leagueMembers.count,
+            seed: memberSeed
         )
         
         differentialPicks = simulatedDifferentials.picks
@@ -93,40 +90,43 @@ class DifferentialAnalysisService {
         )
     }
     
-    private func generateSimulatedDifferentials(
+    private func generateImprovedDifferentials(
         member: LeagueMember,
         topPlayers: [PlayerData],
-        leagueSize: Int
+        leagueSize: Int,
+        seed: Int
     ) -> (picks: [DifferentialPick], missed: [MissedDifferential]) {
         
         var picks: [DifferentialPick] = []
         var missed: [MissedDifferential] = []
         
-        // Simulate 3-7 differential picks per member
-        let numDifferentials = 3 + (member.entry % 5)
+        // Create a more varied number of differentials (2-8 per member)
+        let numDifferentials = 2 + (seed % 7)
         
+        // Create deterministic but varied selection
         for i in 0..<numDifferentials {
-            let playerIndex = (member.entry * 3 + i) % topPlayers.count
+            let playerIndex = (seed * 7 + i * 11) % topPlayers.count
             let player = topPlayers[playerIndex]
             
-            // Simulate ownership percentages
-            let globalOwnership = player.ownership
-            let leagueOwnership = max(5.0, globalOwnership - Double(10 + (member.entry % 20)))
+            // Create more realistic ownership percentages
+            let baseOwnership = player.ownership
+            let ownershipVariation = Double((seed + i) % 40) - 20.0 // -20 to +20
+            let leagueOwnership = max(5.0, min(60.0, baseOwnership + ownershipVariation))
             
-            // Only consider as differential if league ownership < 30%
-            if leagueOwnership < 30 {
-                let gameweeks = simulateGameweeksOwned(member: member, playerIndex: i)
-                let points = simulatePlayerPoints(player: player, gameweeks: gameweeks)
+            // Only consider as differential if league ownership < 40%
+            if leagueOwnership < 40 {
+                let gameweeks = simulateGameweeksOwned(memberSeed: seed, playerIndex: i)
+                let points = simulateImprovedPlayerPoints(player: player, gameweeks: gameweeks, seed: seed + i)
                 
                 let impact = getDifferentialImpact(points: points, ownership: leagueOwnership)
-                let outcome = getDifferentialOutcome(points: points, gameweeks: gameweeks.count, ownership: leagueOwnership)
+                let outcome = getImprovedDifferentialOutcome(points: points, gameweeks: gameweeks.count, ownership: leagueOwnership)
                 
                 let differential = DifferentialPick(
                     player: player,
                     gameweeksPicked: gameweeks,
                     pointsScored: points,
                     leagueOwnership: leagueOwnership,
-                    globalOwnership: globalOwnership,
+                    globalOwnership: baseOwnership,
                     impact: impact,
                     outcome: outcome
                 )
@@ -135,17 +135,20 @@ class DifferentialAnalysisService {
             }
         }
         
-        // Simulate missed opportunities
-        for i in 0..<3 {
-            let playerIndex = (member.entry * 7 + i + 100) % topPlayers.count
+        // Simulate missed opportunities (1-3 per member)
+        let numMissed = 1 + (seed % 3)
+        for i in 0..<numMissed {
+            let playerIndex = (seed * 13 + i * 17 + 50) % topPlayers.count
             let player = topPlayers[playerIndex]
             
-            if player.ownership < 25 { // Low ownership differential
-                let gameweeks = [1, 2, 3, 4] // Simulate missed gameweeks
-                let points = simulatePlayerPoints(player: player, gameweeks: gameweeks)
+            // Focus on players with lower ownership for missed opportunities
+            if player.ownership < 30 {
+                let gameweeks = Array(1 + (i * 3)...min(4 + (i * 3), 10))
+                let points = simulateImprovedPlayerPoints(player: player, gameweeks: gameweeks, seed: seed + i + 100)
                 
-                if points > 30 { // Only show significant missed opportunities
-                    let ownedBy = simulateOtherOwners(leagueSize: leagueSize)
+                // Only show significant missed opportunities
+                if points > 25 {
+                    let ownedBy = simulateOtherOwners(leagueSize: leagueSize, seed: seed + i)
                     let impact = getDifferentialImpact(points: points, ownership: player.ownership)
                     
                     let missed_diff = MissedDifferential(
@@ -164,7 +167,59 @@ class DifferentialAnalysisService {
         return (picks, missed)
     }
     
-    // MARK: - What-If Scenarios Implementation
+    // MARK: - Improved Simulation Functions
+    
+    private func simulateImprovedPlayerPoints(player: PlayerData, gameweeks: [Int], seed: Int) -> Int {
+        let avgPointsPerGame = Double(player.totalPoints) / 38.0
+        
+        // Create more realistic variation (0.5x to 2.5x)
+        let randomFactor = Double((seed % 200) + 50) / 100.0 // 0.5 to 2.5
+        
+        // Better players have more consistent high returns
+        let playerQualityBonus = player.totalPoints > 150 ? 1.2 : (player.totalPoints > 100 ? 1.1 : 1.0)
+        
+        // Some gameweeks are just better (simulate double gameweeks, good fixtures)
+        let gameweekBonus = gameweeks.contains { $0 % 7 == 0 } ? 1.3 : 1.0
+        
+        let finalPoints = Int(avgPointsPerGame * Double(gameweeks.count) * randomFactor * playerQualityBonus * gameweekBonus)
+        
+        // Ensure minimum reasonable points
+        return max(gameweeks.count * 2, finalPoints)
+    }
+    
+    private func getImprovedDifferentialOutcome(points: Int, gameweeks: Int, ownership: Double) -> DifferentialOutcome {
+        let pointsPerGameweek = Double(points) / Double(gameweeks)
+        let ownershipBonus = (50 - ownership) / 50.0 // Higher bonus for lower ownership
+        let adjustedScore = pointsPerGameweek * (1.0 + ownershipBonus)
+        
+        // More generous thresholds for better outcomes
+        if adjustedScore > 12 {
+            return .masterStroke
+        } else if adjustedScore > 7 {
+            return .goodPick
+        } else if adjustedScore > 4 {
+            return .neutral
+        } else if adjustedScore > 2 {
+            return .poorChoice
+        } else {
+            return .disaster
+        }
+    }
+    
+    private func simulateGameweeksOwned(memberSeed: Int, playerIndex: Int) -> [Int] {
+        let startGW = 1 + ((memberSeed + playerIndex * 3) % 15)
+        let duration = 3 + ((memberSeed + playerIndex) % 8)
+        return Array(startGW..<min(startGW + duration, 39))
+    }
+    
+    private func simulateOtherOwners(leagueSize: Int, seed: Int) -> [String] {
+        let names = ["Alex M.", "Jordan S.", "Sam K.", "Riley P.", "Casey L.", "Taylor B.", "Morgan F.", "Drew C."]
+        let count = min(1 + (seed % 3), min(names.count, leagueSize / 3))
+        let startIndex = seed % (names.count - count + 1)
+        return Array(names[startIndex..<startIndex + count])
+    }
+    
+    // MARK: - What-If Scenarios Implementation (unchanged)
     
     private func generateCaptainScenarios(members: [LeagueMember]) async -> [WhatIfScenario] {
         var scenarios: [WhatIfScenario] = []
@@ -338,7 +393,7 @@ class DifferentialAnalysisService {
         )
     }
     
-    // MARK: - Helper Functions
+    // MARK: - Helper Functions (mostly unchanged)
     
     private func calculateRiskLevel(
         differentialCount: Int,
@@ -370,42 +425,6 @@ class DifferentialAnalysisService {
         } else {
             return .minimal
         }
-    }
-    
-    private func getDifferentialOutcome(points: Int, gameweeks: Int, ownership: Double) -> DifferentialOutcome {
-        let pointsPerGameweek = Double(points) / Double(gameweeks)
-        let ownershipFactor = (100 - ownership) / 100
-        let score = pointsPerGameweek * ownershipFactor
-        
-        if score > 15 {
-            return .masterStroke
-        } else if score > 8 {
-            return .goodPick
-        } else if score > 4 {
-            return .neutral
-        } else if score > 2 {
-            return .poorChoice
-        } else {
-            return .disaster
-        }
-    }
-    
-    private func simulateGameweeksOwned(member: LeagueMember, playerIndex: Int) -> [Int] {
-        let startGW = 1 + (playerIndex * 3) % 20
-        let duration = 3 + (member.entry % 4)
-        return Array(startGW..<min(startGW + duration, 39))
-    }
-    
-    private func simulatePlayerPoints(player: PlayerData, gameweeks: [Int]) -> Int {
-        let avgPointsPerGame = Double(player.totalPoints) / 38.0
-        let variationFactor = 0.8 + Double(gameweeks.count % 5) * 0.1
-        return Int(avgPointsPerGame * Double(gameweeks.count) * variationFactor)
-    }
-    
-    private func simulateOtherOwners(leagueSize: Int) -> [String] {
-        let names = ["Alex", "Jordan", "Sam", "Riley", "Casey"]
-        let count = min(2 + (leagueSize % 3), names.count)
-        return Array(names.prefix(count))
     }
     
     private func findHighVariationGameweeks(members: [LeagueMember]) -> [Int] {
