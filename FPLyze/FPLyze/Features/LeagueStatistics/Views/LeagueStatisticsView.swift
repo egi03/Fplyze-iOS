@@ -49,23 +49,42 @@ struct LeagueStatisticsView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
-                        // Favorite Button
+                        // Enhanced Favorite Button with visible outline
                         Button(action: {
                             withAnimation(.spring()) {
                                 viewModel.toggleFavorite(leagueId: leagueId)
                             }
                         }) {
-                            Image(systemName: viewModel.isFavorite ? "star.fill" : "star")
-                                .foregroundColor(viewModel.isFavorite ? .yellow : .white)
-                                .scaleEffect(viewModel.isFavorite ? 1.2 : 1.0)
-                                .animation(.spring(response: 0.3, dampingFraction: 0.6), value: viewModel.isFavorite)
+                            ZStack {
+                                // Background circle for better visibility
+                                Circle()
+                                    .fill(Color.white.opacity(0.2))
+                                    .frame(width: 32, height: 32)
+                                
+                                Image(systemName: viewModel.isFavorite ? "star.fill" : "star")
+                                    .foregroundColor(viewModel.isFavorite ? .yellow : .black)
+                                    .font(.title3)
+                                    .scaleEffect(viewModel.isFavorite ? 1.2 : 1.0)
+                                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: viewModel.isFavorite)
+                                    // Add shadow for better visibility on light backgrounds
+                                    .shadow(color: .white, radius: viewModel.isFavorite ? 0 : 2)
+                            }
                         }
                         
                         // Share Button
                         Button(action: {
                             showShareSheet = true
                         }) {
-                            Image(systemName: "square.and.arrow.up")
+                            ZStack {
+                                Circle()
+                                    .fill(Color.white.opacity(0.2))
+                                    .frame(width: 32, height: 32)
+                                
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(.black)
+                                    .font(.title3)
+                                    .shadow(color: .white, radius: 2)
+                            }
                         }
                     }
                 }
@@ -74,7 +93,6 @@ struct LeagueStatisticsView: View {
                 if let statistics = viewModel.statistics {
                     ShareSheet(
                         activityItems: [generateShareText(for: statistics)]
-
                     )
                 }
             }
@@ -223,7 +241,7 @@ struct LeagueStatisticsView: View {
             text += "👑 Top Average: \(topManager.managerName) - \(String(format: "%.1f", topManager.averagePoints)) pts/gw\n"
         }
         
-        text += "\nView more stats with FPLyze!"
+        text += "\nView more stats with FPL.stats!"
         
         return text
     }
