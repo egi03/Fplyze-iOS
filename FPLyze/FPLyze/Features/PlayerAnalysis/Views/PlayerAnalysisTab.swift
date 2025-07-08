@@ -54,120 +54,150 @@ struct PlayerAnalysisTab: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                // Header Section (now scrollable)
-                VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Player Analysis")
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                            
-                            Text("What could have been...")
-                                .font(.subheadline)
-                                .foregroundColor(Color("FplTextSecondary"))
-                        }
-                        
-                        Spacer()
-                        
-                        Button(action: { showingInfoSheet = true }) {
-                            Image(systemName: "info.circle")
-                                .font(.title2)
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.top)
-                    
-                    // Analysis Type Selector with stats
-                    VStack(spacing: 12) {
-                        Picker("Analysis Type", selection: $selectedAnalysisType) {
-                            ForEach(AnalysisType.allCases, id: \.self) { type in
-                                Label(type.rawValue, systemImage: type.icon)
-                                    .tag(type)
-                            }
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding(.horizontal)
-                        
-                        // Context Description
-                        Text(selectedAnalysisType.detailedDescription)
-                            .font(.caption)
-                            .foregroundColor(Color("FplTextSecondary"))
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal)
-                        
-                        // Quick Stats
-                        AnalysisQuickStats(
-                            analysisType: selectedAnalysisType,
-                            missedAnalyses: missedAnalyses,
-                            underperformerAnalyses: underperformerAnalyses
-                        )
-                        .padding(.horizontal)
-                    }
-                }
-                .padding(.bottom, 8)
-                .background(Color("FplSurface"))
-                .cornerRadius(15)
-                .shadow(color: .black.opacity(0.05), radius: 5, y: 5)
-                .padding(.horizontal)
+        VStack(spacing: 0) {
+            // Demo Banner
+            HStack {
+                Image(systemName: "hammer.fill")
+                    .foregroundColor(.orange)
                 
-                // Main Content
-                LazyVStack(spacing: 16) {
-                    switch selectedAnalysisType {
-                    case .missed:
-                        if missedAnalyses.isEmpty {
-                            EmptyAnalysisView(type: .missed)
-                                .padding(.horizontal)
-                        } else {
-                            ForEach(missedAnalyses) { analysis in
-                                EnhancedMissedPlayerCard(
-                                    analysis: analysis,
-                                    averageLeagueMissed: averageMissedPerManager,
-                                    isExpanded: selectedManager == analysis.managerId,
-                                    onTap: {
-                                        withAnimation(.spring()) {
-                                            selectedManager = selectedManager == analysis.managerId ? nil : analysis.managerId
-                                        }
-                                    },
-                                    onPlayerTap: { player in
-                                        selectedPlayer = player
-                                        showingPlayerDetail = true
-                                    }
-                                )
-                                .padding(.horizontal)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("DEMO")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(.orange)
+                    
+                    Text("This feature is work in progress")
+                        .font(.caption2)
+                        .foregroundColor(Color("FplTextSecondary"))
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(Color.orange.opacity(0.1))
+            .overlay(
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(Color.orange.opacity(0.3)),
+                alignment: .bottom
+            )
+            
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Header Section (now scrollable)
+                    VStack(spacing: 16) {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("Player Analysis")
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                
+                                Text("What could have been...")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color("FplTextSecondary"))
+                            }
+                            
+                            Spacer()
+                            
+                            Button(action: { showingInfoSheet = true }) {
+                                Image(systemName: "info.circle")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
                             }
                         }
+                        .padding(.horizontal)
+                        .padding(.top)
                         
-                    case .underperformers:
-                        if underperformerAnalyses.isEmpty {
-                            EmptyAnalysisView(type: .underperformers)
+                        // Analysis Type Selector with stats
+                        VStack(spacing: 12) {
+                            Picker("Analysis Type", selection: $selectedAnalysisType) {
+                                ForEach(AnalysisType.allCases, id: \.self) { type in
+                                    Label(type.rawValue, systemImage: type.icon)
+                                        .tag(type)
+                                }
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .padding(.horizontal)
+                            
+                            // Context Description
+                            Text(selectedAnalysisType.detailedDescription)
+                                .font(.caption)
+                                .foregroundColor(Color("FplTextSecondary"))
+                                .multilineTextAlignment(.center)
                                 .padding(.horizontal)
-                        } else {
-                            ForEach(underperformerAnalyses) { analysis in
-                                EnhancedUnderperformerCard(
-                                    analysis: analysis,
-                                    isExpanded: selectedManager == analysis.managerId,
-                                    onTap: {
-                                        withAnimation(.spring()) {
-                                            selectedManager = selectedManager == analysis.managerId ? nil : analysis.managerId
+                            
+                            // Quick Stats
+                            AnalysisQuickStats(
+                                analysisType: selectedAnalysisType,
+                                missedAnalyses: missedAnalyses,
+                                underperformerAnalyses: underperformerAnalyses
+                            )
+                            .padding(.horizontal)
+                        }
+                    }
+                    .padding(.bottom, 8)
+                    .background(Color("FplSurface"))
+                    .cornerRadius(15)
+                    .shadow(color: .black.opacity(0.05), radius: 5, y: 5)
+                    .padding(.horizontal)
+                    
+                    // Main Content
+                    LazyVStack(spacing: 16) {
+                        switch selectedAnalysisType {
+                        case .missed:
+                            if missedAnalyses.isEmpty {
+                                EmptyAnalysisView(type: .missed)
+                                    .padding(.horizontal)
+                            } else {
+                                ForEach(missedAnalyses) { analysis in
+                                    EnhancedMissedPlayerCard(
+                                        analysis: analysis,
+                                        averageLeagueMissed: averageMissedPerManager,
+                                        isExpanded: selectedManager == analysis.managerId,
+                                        onTap: {
+                                            withAnimation(.spring()) {
+                                                selectedManager = selectedManager == analysis.managerId ? nil : analysis.managerId
+                                            }
+                                        },
+                                        onPlayerTap: { player in
+                                            selectedPlayer = player
+                                            showingPlayerDetail = true
                                         }
-                                    },
-                                    onPlayerTap: { player in
-                                        selectedPlayer = player
-                                        showingPlayerDetail = true
-                                    }
-                                )
-                                .padding(.horizontal)
+                                    )
+                                    .padding(.horizontal)
+                                }
+                            }
+                            
+                        case .underperformers:
+                            if underperformerAnalyses.isEmpty {
+                                EmptyAnalysisView(type: .underperformers)
+                                    .padding(.horizontal)
+                            } else {
+                                ForEach(underperformerAnalyses) { analysis in
+                                    EnhancedUnderperformerCard(
+                                        analysis: analysis,
+                                        isExpanded: selectedManager == analysis.managerId,
+                                        onTap: {
+                                            withAnimation(.spring()) {
+                                                selectedManager = selectedManager == analysis.managerId ? nil : analysis.managerId
+                                            }
+                                        },
+                                        onPlayerTap: { player in
+                                            selectedPlayer = player
+                                            showingPlayerDetail = true
+                                        }
+                                    )
+                                    .padding(.horizontal)
+                                }
                             }
                         }
                     }
+                    .padding(.bottom, 20)
                 }
-                .padding(.bottom, 20)
+                .background(Color("FplSurface"))
             }
         }
-        .background(Color("FplSurface"))
         .sheet(isPresented: $showingPlayerDetail) {
             if let player = selectedPlayer {
                 EnhancedPlayerDetailSheet(player: player)

@@ -255,7 +255,7 @@ struct StatisticsTabBar: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16){
+            HStack(spacing: 8){  // Reduced from 16 to 8
                 ForEach(StatisticsTab.allCases, id: \.self) { tab in
                     EnhancedTabButton(
                         tab: tab,
@@ -265,7 +265,7 @@ struct StatisticsTabBar: View {
                     )
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 12)  // Reduced from default to 12
             .padding(.vertical, 8)
         }
         .background(Color("FplBackground"))
@@ -281,14 +281,14 @@ struct EnhancedTabButton: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 6) {
+            VStack(spacing: 4) {  // Reduced from 6 to 4
                 ZStack {
                     Circle()
                         .fill(isSelected ? Color("FplPrimary") : Color.clear)
-                        .frame(width: 40, height: 40)
+                        .frame(width: 36, height: 36)  // Reduced from 40 to 36
                     
                     Image(systemName: tab.icon)
-                        .font(.title3)
+                        .font(.system(size: 16))  // More specific size instead of title3
                         .foregroundColor(isSelected ? .white : Color("FplTextSecondary"))
                         .symbolEffect(.bounce, value: isSelected)
                 }
@@ -300,13 +300,13 @@ struct EnhancedTabButton: View {
                     .lineLimit(1)
                     .fixedSize(horizontal: true, vertical: false)
             }
-            .frame(minWidth: 60)
-            .padding(.vertical, 8)
-            .padding(.horizontal, 8)
+            .frame(minWidth: 50)  // Reduced from 60 to 50
+            .padding(.vertical, 6)  // Reduced from 8 to 6
+            .padding(.horizontal, 6)  // Reduced from 8 to 6
             .background(
                 ZStack {
                     if isSelected {
-                        RoundedRectangle(cornerRadius: 12)
+                        RoundedRectangle(cornerRadius: 10)  // Reduced from 12 to 10
                             .fill(Color("FplPrimary").opacity(0.1))
                             .matchedGeometryEffect(id: "tab_background", in: namespace)
                     }
@@ -342,9 +342,9 @@ struct TabButton: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
+            VStack(spacing: 6) {
                 Image(systemName: tab.icon)
-                    .font(.title2)
+                    .font(.system(size: 18))  // More specific size
                     .symbolEffect(.bounce, value: isSelected)
                 
                 Text(tab.rawValue)
@@ -352,12 +352,12 @@ struct TabButton: View {
                     .fontWeight(isSelected ? .bold : .regular)
             }
             .foregroundColor(isSelected ? Color("FplPrimary") : Color("FplTextSecondary"))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 12)  // Reduced from 16
+            .padding(.vertical, 6)  // Reduced from 8
             .background(
                 ZStack {
                     if isSelected {
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 8)  // Reduced from 10
                             .fill(Color("FplPrimary").opacity(0.1))
                             .matchedGeometryEffect(id: "tab", in: namespace)
                     }

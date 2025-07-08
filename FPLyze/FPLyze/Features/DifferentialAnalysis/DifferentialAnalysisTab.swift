@@ -83,81 +83,111 @@ struct DifferentialAnalysisTab: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                // Header with league summary
+        VStack(spacing: 0) {
+            // Demo Banner
+            HStack {
+                Image(systemName: "hammer.fill")
+                    .foregroundColor(.orange)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("DEMO")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(.orange)
+                    
+                    Text("This feature is work in progress")
+                        .font(.caption2)
+                        .foregroundColor(Color("FplTextSecondary"))
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(Color.orange.opacity(0.1))
+            .overlay(
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(Color.orange.opacity(0.3)),
+                alignment: .bottom
+            )
+            
+            ScrollView {
                 VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Differential Analysis")
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
+                    // Header with league summary
+                    VStack(spacing: 16) {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("Differential Analysis")
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                
+                                Text("Unique picks that made the difference")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color("FplTextSecondary"))
+                            }
                             
-                            Text("Unique picks that made the difference")
-                                .font(.subheadline)
-                                .foregroundColor(Color("FplTextSecondary"))
-                        }
-                        
-                        Spacer()
-                        
-                        Button(action: { showingInfoSheet = true }) {
-                            Image(systemName: "info.circle")
-                                .font(.title2)
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.top)
-                    
-                    // League Summary Card
-                    DifferentialLeagueSummaryCard(summary: leagueSummary)
-                        .padding(.horizontal)
-                    
-                    // Sort Options
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            ForEach(DifferentialSortType.allCases, id: \.self) { type in
-                                DifferentialSortChip(
-                                    type: type,
-                                    isSelected: sortBy == type,
-                                    action: { sortBy = type }
-                                )
+                            Spacer()
+                            
+                            Button(action: { showingInfoSheet = true }) {
+                                Image(systemName: "info.circle")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
                             }
                         }
                         .padding(.horizontal)
-                    }
-                }
-                .background(Color("FplSurface"))
-                .cornerRadius(15)
-                .shadow(color: .black.opacity(0.05), radius: 5, y: 5)
-                .padding(.horizontal)
-                
-                // Manager Analysis Cards
-                if analyses.isEmpty {
-                    EmptyDifferentialView()
-                        .padding(.horizontal)
-                } else {
-                    LazyVStack(spacing: 16) {
-                        ForEach(Array(sortedAnalyses.enumerated()), id: \.element.id) { index, analysis in
-                            DifferentialAnalysisCard(
-                                analysis: analysis,
-                                rank: index + 1,
-                                isExpanded: selectedManager == analysis.managerId,
-                                onTap: {
-                                    withAnimation(.spring()) {
-                                        selectedManager = selectedManager == analysis.managerId ? nil : analysis.managerId
-                                    }
+                        .padding(.top)
+                        
+                        // League Summary Card
+                        DifferentialLeagueSummaryCard(summary: leagueSummary)
+                            .padding(.horizontal)
+                        
+                        // Sort Options
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(DifferentialSortType.allCases, id: \.self) { type in
+                                    DifferentialSortChip(
+                                        type: type,
+                                        isSelected: sortBy == type,
+                                        action: { sortBy = type }
+                                    )
                                 }
-                            )
+                            }
                             .padding(.horizontal)
                         }
                     }
+                    .background(Color("FplSurface"))
+                    .cornerRadius(15)
+                    .shadow(color: .black.opacity(0.05), radius: 5, y: 5)
+                    .padding(.horizontal)
+                    
+                    // Manager Analysis Cards
+                    if analyses.isEmpty {
+                        EmptyDifferentialView()
+                            .padding(.horizontal)
+                    } else {
+                        LazyVStack(spacing: 16) {
+                            ForEach(Array(sortedAnalyses.enumerated()), id: \.element.id) { index, analysis in
+                                DifferentialAnalysisCard(
+                                    analysis: analysis,
+                                    rank: index + 1,
+                                    isExpanded: selectedManager == analysis.managerId,
+                                    onTap: {
+                                        withAnimation(.spring()) {
+                                            selectedManager = selectedManager == analysis.managerId ? nil : analysis.managerId
+                                        }
+                                    }
+                                )
+                                .padding(.horizontal)
+                            }
+                        }
+                    }
+                    
+                    Spacer(minLength: 20)
                 }
-                
-                Spacer(minLength: 20)
             }
+            .background(Color("FplBackground"))
         }
-        .background(Color("FplBackground"))
         .sheet(isPresented: $showingInfoSheet) {
             DifferentialAnalysisInfoSheet()
         }

@@ -60,81 +60,111 @@ struct WhatIfScenariosTab: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                // Header with summary
+        VStack(spacing: 0) {
+            // Demo Banner
+            HStack {
+                Image(systemName: "hammer.fill")
+                    .foregroundColor(.orange)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("DEMO")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(.orange)
+                    
+                    Text("This feature is work in progress")
+                        .font(.caption2)
+                        .foregroundColor(Color("FplTextSecondary"))
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(Color.orange.opacity(0.1))
+            .overlay(
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(Color.orange.opacity(0.3)),
+                alignment: .bottom
+            )
+            
+            ScrollView {
                 VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("What-If Scenarios")
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
+                    // Header with summary
+                    VStack(spacing: 16) {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("What-If Scenarios")
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                
+                                Text("Explore alternative timelines")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color("FplTextSecondary"))
+                            }
                             
-                            Text("Explore alternative timelines")
-                                .font(.subheadline)
-                                .foregroundColor(Color("FplTextSecondary"))
-                        }
-                        
-                        Spacer()
-                        
-                        Button(action: { showingInfoSheet = true }) {
-                            Image(systemName: "info.circle")
-                                .font(.title2)
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.top)
-                    
-                    // Summary Card
-                    WhatIfSummaryCard(summary: scenarioSummary)
-                        .padding(.horizontal)
-                    
-                    // Filter Options
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            ForEach(ScenarioFilterType.allCases, id: \.self) { type in
-                                FilterChip(
-                                    type: type,
-                                    isSelected: filterType == type,
-                                    count: getScenarioCount(for: type),
-                                    action: { filterType = type }
-                                )
+                            Spacer()
+                            
+                            Button(action: { showingInfoSheet = true }) {
+                                Image(systemName: "info.circle")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
                             }
                         }
                         .padding(.horizontal)
-                    }
-                }
-                .background(Color("FplSurface"))
-                .cornerRadius(15)
-                .shadow(color: .black.opacity(0.05), radius: 5, y: 5)
-                .padding(.horizontal)
-                
-                // Scenario Cards
-                if filteredScenarios.isEmpty {
-                    EmptyWhatIfView()
-                        .padding(.horizontal)
-                } else {
-                    LazyVStack(spacing: 16) {
-                        ForEach(filteredScenarios) { scenario in
-                            WhatIfScenarioCard(
-                                scenario: scenario,
-                                isExpanded: selectedScenario?.id == scenario.id,
-                                onTap: {
-                                    withAnimation(.spring()) {
-                                        selectedScenario = selectedScenario?.id == scenario.id ? nil : scenario
-                                    }
+                        .padding(.top)
+                        
+                        // Summary Card
+                        WhatIfSummaryCard(summary: scenarioSummary)
+                            .padding(.horizontal)
+                        
+                        // Filter Options
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(ScenarioFilterType.allCases, id: \.self) { type in
+                                    FilterChip(
+                                        type: type,
+                                        isSelected: filterType == type,
+                                        count: getScenarioCount(for: type),
+                                        action: { filterType = type }
+                                    )
                                 }
-                            )
+                            }
                             .padding(.horizontal)
                         }
                     }
+                    .background(Color("FplSurface"))
+                    .cornerRadius(15)
+                    .shadow(color: .black.opacity(0.05), radius: 5, y: 5)
+                    .padding(.horizontal)
+                    
+                    // Scenario Cards
+                    if filteredScenarios.isEmpty {
+                        EmptyWhatIfView()
+                            .padding(.horizontal)
+                    } else {
+                        LazyVStack(spacing: 16) {
+                            ForEach(filteredScenarios) { scenario in
+                                WhatIfScenarioCard(
+                                    scenario: scenario,
+                                    isExpanded: selectedScenario?.id == scenario.id,
+                                    onTap: {
+                                        withAnimation(.spring()) {
+                                            selectedScenario = selectedScenario?.id == scenario.id ? nil : scenario
+                                        }
+                                    }
+                                )
+                                .padding(.horizontal)
+                            }
+                        }
+                    }
+                    
+                    Spacer(minLength: 20)
                 }
-                
-                Spacer(minLength: 20)
             }
+            .background(Color("FplBackground"))
         }
-        .background(Color("FplBackground"))
         .sheet(isPresented: $showingInfoSheet) {
             WhatIfScenariosInfoSheet()
         }
