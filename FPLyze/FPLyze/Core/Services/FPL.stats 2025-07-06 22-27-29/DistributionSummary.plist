@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FPL.stats.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>E6ACAD2C7DE4ACAADC12451B9F586DC7CF29C95C</string>
+				<key>dateExpires</key>
+				<string>06.07.2026.</string>
+				<key>type</key>
+				<string>Apple Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>L8PBL6STJF.egii.FPLstats</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>L8PBL6STJF</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>FPL.stats.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>0c088f55-12d9-43e6-a919-a3e2ca81956b</string>
+				<key>dateExpires</key>
+				<string>06.07.2026.</string>
+				<key>name</key>
+				<string>FPL Stats Ad Hoc</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>L8PBL6STJF</string>
+				<key>name</key>
+				<string>Eugen Sedlar (Individual)</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>

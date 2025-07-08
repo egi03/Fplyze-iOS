@@ -1,0 +1,124 @@
+2025-07-06 20:27:22 +0000  Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x32a941680; archive(resolved)="<IDEArchive: 0x60000d923250>", distributionTask(resolved)="2", distributionDestination(resolved)="1", distributionMethod(resolved)="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team(resolved)="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	Chain (15, self inclusive):
+	<IDEDistributionProcessingPipelineContext: 0x32a941680; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionProcessingPipelineContext: 0x399953200; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x12c038620; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x12a174d30; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x12a174870; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x12a186e80; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x12a186c70; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x12a174b20; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x14f1a1e10; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="<IDEProvisioningDisambiguatableBasicTeam: 0x60002e746a00; teamID='L8PBL6STJF', teamName='Eugen Sedlar (Individual)', teamType='Individual', username='t0k3n.csgo@gmail.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0x12a186a60; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="(null)">
+	<IDEDistributionContext: 0x12a186850; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="(null)">
+	<IDEDistributionContext: 0x12a1833e0; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="(null)">
+	<IDEDistributionContext: 0x3149d71a0; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="<IDEDistributionMethodiOSAdHoc: 0x600007082bc0>", team="(null)">
+	<IDEDistributionContext: 0x33b29df20; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="(null)", team="(null)">
+	<IDEDistributionContext: 0x333adc670; archive = "<IDEArchive: 0x60000d923250>", distributionMethod="(null)", team="(null)">
+</IDEDistributionProcessingPipelineContext: 0x32a941680>
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionCreateDestRootStep
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionCopyItemStep
+2025-07-06 20:27:22 +0000  Running /usr/bin/ditto '-V' '/Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app' '/var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Root/Payload/FPL.stats.app'
+2025-07-06 20:27:22 +0000  >>> Copying /Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app 
+2025-07-06 20:27:22 +0000  copying file ./_CodeSignature/CodeResources ... 
+2025-07-06 20:27:22 +0000  2317 bytes for ./_CodeSignature/CodeResources
+2025-07-06 20:27:22 +0000  copying file ./FPL.stats ... 
+2025-07-06 20:27:22 +0000  1641616 bytes for ./FPL.stats
+2025-07-06 20:27:22 +0000  copying file ./Assets.car ... 
+2025-07-06 20:27:22 +0000  28336 bytes for ./Assets.car
+2025-07-06 20:27:22 +0000  copying file ./embedded.mobileprovision ... 
+2025-07-06 20:27:22 +0000  12187 bytes for ./embedded.mobileprovision
+2025-07-06 20:27:22 +0000  copying file ./Info.plist ... 
+2025-07-06 20:27:22 +0000  1302 bytes for ./Info.plist
+2025-07-06 20:27:22 +0000  copying file ./PkgInfo ... 
+2025-07-06 20:27:22 +0000  8 bytes for ./PkgInfo
+2025-07-06 20:27:22 +0000  /usr/bin/ditto exited with 0
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionEmbedProfileStep
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionInfoPlistStep
+2025-07-06 20:27:22 +0000  Skipping step: IDEDistributionInfoPlistStep because it said so
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionAppThinningPlistStep
+2025-07-06 20:27:22 +0000  Skipping step: IDEDistributionAppThinningPlistStep because it said so
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionSymbolsStep
+2025-07-06 20:27:22 +0000  Skipping step: IDEDistributionSymbolsStep because it said so
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionAppThinningStep
+2025-07-06 20:27:22 +0000  Skipping step: IDEDistributionAppThinningStep because it said so
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionArchThinningStep
+2025-07-06 20:27:22 +0000  Item /Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app doesn't have the entitlement com.apple.developer.web-browser-engine.host enabled, returning ["arm64e"]
+2025-07-06 20:27:22 +0000  Archs to thin for item /Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app are ["arm64e"]
+2025-07-06 20:27:22 +0000  Running /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '/var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Root/Payload/FPL.stats.app/FPL.stats' '-verify_arch' 'arm64e'
+2025-07-06 20:27:22 +0000  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo exited with 1
+2025-07-06 20:27:22 +0000  Skipping architecture thinning for item "FPL.stats" because arch "arm64e" wasn't found
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionODRStep
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionStripXattrsStep
+2025-07-06 20:27:22 +0000  Skipping stripping extended attributes because the codesign step will strip them.
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionCodesignStep
+2025-07-06 20:27:22 +0000  Entitlements for <IDEDistributionItem: 0x600035853b40; bundleID='egii.FPLstats', path='<DVTFilePath:0x600035664840:'/Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600035861440; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x60000472e340; name='Apple Distribution: Eugen Sedlar (L8PBL6STJF)', hash='E6ACAD2C7DE4ACAADC12451B9F586DC7CF29C95C', serialNumber='2AB274B86CE02A6CC93110C47834E953', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2025-07-06 20:08:51 +0000''>', entitlements='{
+    "application-identifier" = "L8PBL6STJF.egii.FPLstats";
+    "com.apple.developer.team-identifier" = L8PBL6STJF;
+    "get-task-allow" = 0;
+}', teamID='L8PBL6STJF', identifier='egii.FPLstats', executablePath='<DVTFilePath:0x600035739aa0:'/Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app/FPL.stats'>', hardenedRuntime='0'>'>: {
+    "application-identifier" = "L8PBL6STJF.egii.FPLstats";
+    "com.apple.developer.team-identifier" = L8PBL6STJF;
+    "get-task-allow" = 0;
+}
+2025-07-06 20:27:22 +0000  Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2025-07-06 20:27:22 +0000  Entitlements for <IDEDistributionItem: 0x600035853b40; bundleID='egii.FPLstats', path='<DVTFilePath:0x600035664840:'/Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600035861440; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x60000474e640; name='Apple Distribution: Eugen Sedlar (L8PBL6STJF)', hash='E6ACAD2C7DE4ACAADC12451B9F586DC7CF29C95C', serialNumber='2AB274B86CE02A6CC93110C47834E953', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2025-07-06 20:08:51 +0000''>', entitlements='{
+    "application-identifier" = "L8PBL6STJF.egii.FPLstats";
+    "com.apple.developer.team-identifier" = L8PBL6STJF;
+    "get-task-allow" = 0;
+}', teamID='L8PBL6STJF', identifier='egii.FPLstats', executablePath='<DVTFilePath:0x600035739aa0:'/Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app/FPL.stats'>', hardenedRuntime='0'>'> are: {
+    "application-identifier" = "L8PBL6STJF.egii.FPLstats";
+    "com.apple.developer.team-identifier" = L8PBL6STJF;
+    "get-task-allow" = 0;
+}
+2025-07-06 20:27:22 +0000  Writing entitlements for <IDEDistributionItem: 0x600035853b40; bundleID='egii.FPLstats', path='<DVTFilePath:0x600035664840:'/Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600035861440; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x60000474e640; name='Apple Distribution: Eugen Sedlar (L8PBL6STJF)', hash='E6ACAD2C7DE4ACAADC12451B9F586DC7CF29C95C', serialNumber='2AB274B86CE02A6CC93110C47834E953', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2025-07-06 20:08:51 +0000''>', entitlements='{
+    "application-identifier" = "L8PBL6STJF.egii.FPLstats";
+    "com.apple.developer.team-identifier" = L8PBL6STJF;
+    "get-task-allow" = 0;
+}', teamID='L8PBL6STJF', identifier='egii.FPLstats', executablePath='<DVTFilePath:0x600035739aa0:'/Users/egi/Library/Developer/Xcode/Archives/2025-07-06/FPL.stats 06.07.2025., 22.23.xcarchive/Products/Applications/FPL.stats.app/FPL.stats'>', hardenedRuntime='0'>'> to: /var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/entitlements~~~XoFXvW
+2025-07-06 20:27:22 +0000  invoking codesign: <NSConcreteTask: 0x6000112f46e0; launchPath='/usr/bin/codesign', arguments='(
+    "-f",
+    "-s",
+    E6ACAD2C7DE4ACAADC12451B9F586DC7CF29C95C,
+    "--entitlements",
+    "/var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/entitlements~~~XoFXvW",
+    "--preserve-metadata=identifier,flags,runtime",
+    "--generate-entitlement-der",
+    "--strip-disallowed-xattrs",
+    "-vvv",
+    "/var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Root/Payload/FPL.stats.app"
+)'>
+2025-07-06 20:27:22 +0000  codesign output: /var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Root/Payload/FPL.stats.app: replacing existing signature
+/var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Root/Payload/FPL.stats.app: signed app bundle with Mach-O thin (arm64) [egii.FPLstats]
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionZipODRItemStep
+2025-07-06 20:27:22 +0000  Skipping step: IDEDistributionZipODRItemStep because it said so
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionCreateIPAStep
+2025-07-06 20:27:22 +0000  Running /usr/bin/ditto '-V' '-c' '-k' '--norsrc' '/var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Root' '/var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Packages/FPL.stats.ipa'
+2025-07-06 20:27:22 +0000  >>> Copying /var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Root 
+2025-07-06 20:27:22 +0000  copying file ./Payload/FPL.stats.app/_CodeSignature/CodeResources ... 
+2025-07-06 20:27:22 +0000  2317 bytes for ./Payload/FPL.stats.app/_CodeSignature/CodeResources
+2025-07-06 20:27:22 +0000  copying file ./Payload/FPL.stats.app/FPL.stats ... 
+2025-07-06 20:27:22 +0000  1641616 bytes for ./Payload/FPL.stats.app/FPL.stats
+copying file ./Payload/FPL.stats.app/Assets.car ... 
+2025-07-06 20:27:22 +0000  28336 bytes for ./Payload/FPL.stats.app/Assets.car
+2025-07-06 20:27:22 +0000  copying file ./Payload/FPL.stats.app/embedded.mobileprovision ... 
+2025-07-06 20:27:22 +0000  12187 bytes for ./Payload/FPL.stats.app/embedded.mobileprovision
+copying file ./Payload/FPL.stats.app/Info.plist ... 
+2025-07-06 20:27:22 +0000  1302 bytes for ./Payload/FPL.stats.app/Info.plist
+2025-07-06 20:27:22 +0000  copying file ./Payload/FPL.stats.app/PkgInfo ... 
+8 bytes for ./Payload/FPL.stats.app/PkgInfo
+2025-07-06 20:27:22 +0000  /usr/bin/ditto exited with 0
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionAppStoreInformationStep
+2025-07-06 20:27:22 +0000  Skipping step: IDEDistributionAppStoreInformationStep because it said so
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionGenerateProcessedDistributionItems
+2025-07-06 20:27:22 +0000  IDEDistributionItem init <DVTFilePath:0x60003584db60:'/var/folders/5s/vyblws5j4v90g7gjjcdxqtp80000gn/T/XcodeDistPipeline.~~~rPsGaG/Root/Payload/FPL.stats.app'>
+2025-07-06 20:27:22 +0000  Processing step: IDEDistributionCreateManifestStep

@@ -24,6 +24,7 @@ struct ChartView: View {
                     )
                     .foregroundStyle(by: .value("Manager", member.playerName))
                     .symbol(by: .value("Manager", member.playerName))
+                    .lineStyle(StrokeStyle(lineWidth: 2.5))
                 }
             }
         }
@@ -40,18 +41,21 @@ struct ChartView: View {
         switch chartType {
         case .cumulativePoints:
             return "Total points"
+        case .leagueRank:
+            return "League Position"
         case .gameweekPoints:
             return "Points"
-        case .rankProgression:
-            return "Rank"
         }
     }
     
     private func yValue(for gw: GameweekPerformance) -> Int {
         switch chartType {
-            case .cumulativePoints: return gw.totalPoints
-            case .gameweekPoints: return gw.points
-            case .rankProgression: return -gw.rank
+        case .cumulativePoints:
+            return gw.totalPoints
+        case .leagueRank:
+            return -gw.rank
+        case .gameweekPoints:
+            return gw.points
         }
     }
 }

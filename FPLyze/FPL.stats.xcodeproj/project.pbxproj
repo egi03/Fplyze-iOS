@@ -24,18 +24,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E45090852DFF0ACB001B6DEC /* FPLyze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FPLyze.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E45090922DFF0ACD001B6DEC /* FPLyzeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FPLyzeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E450909C2DFF0ACD001B6DEC /* FPLyzeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FPLyzeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E45090852DFF0ACB001B6DEC /* FPL.stats.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FPL.stats.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E45090922DFF0ACD001B6DEC /* FPL.statsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FPL.statsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E450909C2DFF0ACD001B6DEC /* FPL.statsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FPL.statsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E4427FFE2E074E4800997924 /* Exceptions for "FPLyze" folder in "FPLyze" target */ = {
+		E4427FFE2E074E4800997924 /* Exceptions for "FPLyze" folder in "FPL.stats" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = E45090842DFF0ACB001B6DEC /* FPLyze */;
+			target = E45090842DFF0ACB001B6DEC /* FPL.stats */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -43,7 +43,7 @@
 		E45090872DFF0ACB001B6DEC /* FPLyze */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				E4427FFE2E074E4800997924 /* Exceptions for "FPLyze" folder in "FPLyze" target */,
+				E4427FFE2E074E4800997924 /* Exceptions for "FPLyze" folder in "FPL.stats" target */,
 			);
 			path = FPLyze;
 			sourceTree = "<group>";
@@ -98,9 +98,9 @@
 		E45090862DFF0ACB001B6DEC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E45090852DFF0ACB001B6DEC /* FPLyze.app */,
-				E45090922DFF0ACD001B6DEC /* FPLyzeTests.xctest */,
-				E450909C2DFF0ACD001B6DEC /* FPLyzeUITests.xctest */,
+				E45090852DFF0ACB001B6DEC /* FPL.stats.app */,
+				E45090922DFF0ACD001B6DEC /* FPL.statsTests.xctest */,
+				E450909C2DFF0ACD001B6DEC /* FPL.statsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,9 +108,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E45090842DFF0ACB001B6DEC /* FPLyze */ = {
+		E45090842DFF0ACB001B6DEC /* FPL.stats */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E45090A62DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyze" */;
+			buildConfigurationList = E45090A62DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPL.stats" */;
 			buildPhases = (
 				E45090812DFF0ACB001B6DEC /* Sources */,
 				E45090822DFF0ACB001B6DEC /* Frameworks */,
@@ -123,16 +123,16 @@
 			fileSystemSynchronizedGroups = (
 				E45090872DFF0ACB001B6DEC /* FPLyze */,
 			);
-			name = FPLyze;
+			name = FPL.stats;
 			packageProductDependencies = (
 			);
 			productName = FPLyze;
-			productReference = E45090852DFF0ACB001B6DEC /* FPLyze.app */;
+			productReference = E45090852DFF0ACB001B6DEC /* FPL.stats.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E45090912DFF0ACD001B6DEC /* FPLyzeTests */ = {
+		E45090912DFF0ACD001B6DEC /* FPL.statsTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E45090A92DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyzeTests" */;
+			buildConfigurationList = E45090A92DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPL.statsTests" */;
 			buildPhases = (
 				E450908E2DFF0ACD001B6DEC /* Sources */,
 				E450908F2DFF0ACD001B6DEC /* Frameworks */,
@@ -146,16 +146,16 @@
 			fileSystemSynchronizedGroups = (
 				E45090952DFF0ACD001B6DEC /* FPLyzeTests */,
 			);
-			name = FPLyzeTests;
+			name = FPL.statsTests;
 			packageProductDependencies = (
 			);
 			productName = FPLyzeTests;
-			productReference = E45090922DFF0ACD001B6DEC /* FPLyzeTests.xctest */;
+			productReference = E45090922DFF0ACD001B6DEC /* FPL.statsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E450909B2DFF0ACD001B6DEC /* FPLyzeUITests */ = {
+		E450909B2DFF0ACD001B6DEC /* FPL.statsUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E45090AC2DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyzeUITests" */;
+			buildConfigurationList = E45090AC2DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPL.statsUITests" */;
 			buildPhases = (
 				E45090982DFF0ACD001B6DEC /* Sources */,
 				E45090992DFF0ACD001B6DEC /* Frameworks */,
@@ -169,11 +169,11 @@
 			fileSystemSynchronizedGroups = (
 				E450909F2DFF0ACD001B6DEC /* FPLyzeUITests */,
 			);
-			name = FPLyzeUITests;
+			name = FPL.statsUITests;
 			packageProductDependencies = (
 			);
 			productName = FPLyzeUITests;
-			productReference = E450909C2DFF0ACD001B6DEC /* FPLyzeUITests.xctest */;
+			productReference = E450909C2DFF0ACD001B6DEC /* FPL.statsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -199,7 +199,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E45090802DFF0ACB001B6DEC /* Build configuration list for PBXProject "FPLyze" */;
+			buildConfigurationList = E45090802DFF0ACB001B6DEC /* Build configuration list for PBXProject "FPL.stats" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -213,9 +213,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E45090842DFF0ACB001B6DEC /* FPLyze */,
-				E45090912DFF0ACD001B6DEC /* FPLyzeTests */,
-				E450909B2DFF0ACD001B6DEC /* FPLyzeUITests */,
+				E45090842DFF0ACB001B6DEC /* FPL.stats */,
+				E45090912DFF0ACD001B6DEC /* FPL.statsTests */,
+				E450909B2DFF0ACD001B6DEC /* FPL.statsUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -271,12 +271,12 @@
 /* Begin PBXTargetDependency section */
 		E45090942DFF0ACD001B6DEC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E45090842DFF0ACB001B6DEC /* FPLyze */;
+			target = E45090842DFF0ACB001B6DEC /* FPL.stats */;
 			targetProxy = E45090932DFF0ACD001B6DEC /* PBXContainerItemProxy */;
 		};
 		E450909E2DFF0ACD001B6DEC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E45090842DFF0ACB001B6DEC /* FPLyze */;
+			target = E45090842DFF0ACB001B6DEC /* FPL.stats */;
 			targetProxy = E450909D2DFF0ACD001B6DEC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -406,9 +406,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2GA8D2D667;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = L8PBL6STJF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FPLyze/Info.plist;
@@ -423,8 +425,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = egii.FPLyze;
+				PRODUCT_BUNDLE_IDENTIFIER = egii.FPLstats;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "FPL Stats Ad Hoc";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -436,9 +440,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2GA8D2D667;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = L8PBL6STJF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FPLyze/Info.plist;
@@ -453,8 +459,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = egii.FPLyze;
+				PRODUCT_BUNDLE_IDENTIFIER = egii.FPLstats;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "FPL Stats Ad Hoc";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -475,7 +483,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FPLyze.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FPLyze";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FPL.stats.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FPL.stats";
 			};
 			name = Debug;
 		};
@@ -493,7 +501,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FPLyze.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FPLyze";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FPL.stats.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FPL.stats";
 			};
 			name = Release;
 		};
@@ -532,7 +540,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E45090802DFF0ACB001B6DEC /* Build configuration list for PBXProject "FPLyze" */ = {
+		E45090802DFF0ACB001B6DEC /* Build configuration list for PBXProject "FPL.stats" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E45090A42DFF0ACD001B6DEC /* Debug */,
@@ -541,7 +549,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E45090A62DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyze" */ = {
+		E45090A62DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPL.stats" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E45090A72DFF0ACD001B6DEC /* Debug */,
@@ -550,7 +558,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E45090A92DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyzeTests" */ = {
+		E45090A92DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPL.statsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E45090AA2DFF0ACD001B6DEC /* Debug */,
@@ -559,7 +567,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E45090AC2DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPLyzeUITests" */ = {
+		E45090AC2DFF0ACD001B6DEC /* Build configuration list for PBXNativeTarget "FPL.statsUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E45090AD2DFF0ACD001B6DEC /* Debug */,
