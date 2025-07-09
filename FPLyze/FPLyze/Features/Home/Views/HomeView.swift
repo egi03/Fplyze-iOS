@@ -13,6 +13,7 @@ struct HomeView: View {
     @State private var navigateToLeague = false
     @State private var showInvalidIdAlert = false
     @State private var selectedFavoriteLeagueId: Int?
+    @State private var navigateToDemo = false
     @FocusState private var isSearchFocused: Bool
     @State private var animateGradient = false
     @State private var showingThemeSheet = false
@@ -93,6 +94,53 @@ struct HomeView: View {
                         }
                         .padding(.top, 60)
                         
+                        // Demo Section
+                           VStack(spacing: 20) {
+                               Text("Try the demo first!")
+                                   .font(.title3)
+                                   .fontWeight(.medium)
+                                   .foregroundColor(Color("FplTextPrimary"))
+
+                               Button(action: {
+                                   navigateToDemo = true
+                               }) {
+                                   HStack {
+                                       Image(systemName: "play.circle.fill")
+                                           .font(.title2)
+
+                                       Text("View Demo League")
+                                           .fontWeight(.semibold)
+
+                                       Image(systemName: "sparkles")
+                                           .font(.caption)
+                                   }
+                                   .foregroundColor(.white)
+                                   .padding(.horizontal, 30)
+                                   .padding(.vertical, 15)
+                                   .background(
+                                       LinearGradient(
+                                           colors: [Color("FplAccent"), Color("FplAccent").opacity(0.8)],
+                                           startPoint: .leading,
+                                           endPoint: .trailing
+                                       )
+                                   )
+                                   .cornerRadius(30)
+                                   .shadow(color: Color("FplAccent").opacity(0.3), radius: 10, x: 0, y: 5)
+                               }
+                               .scaleEffect(1.05)
+                               .animation(.spring(response: 0.3), value: navigateToDemo)
+                           }
+                           .padding(.horizontal, 20)
+
+                           // Divider with "OR"
+                           HStack {
+                               VStack { Divider() }
+                               Text("OR")
+                                   .foregroundColor(Color("FplTextSecondary"))
+                                   .padding(.horizontal, 16)
+                               VStack { Divider() }
+                           }
+                           .padding(.horizontal, 40)
                         // Search Section
                         VStack(spacing: 20) {
                             Text("Enter your league ID")
@@ -280,6 +328,10 @@ struct HomeView: View {
                         .navigationBarHidden(true)
                 }
             }
+            .navigationDestination(isPresented: $navigateToDemo) {
+                            DemoLeagueStatisticsView()
+                                .navigationBarHidden(true)
+                        }
             .alert("Invalid League ID", isPresented: $showInvalidIdAlert) {
                 Button("OK") {
                     leagueId = ""
