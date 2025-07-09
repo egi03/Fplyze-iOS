@@ -14,6 +14,7 @@ struct HomeView: View {
     @State private var showInvalidIdAlert = false
     @State private var selectedFavoriteLeagueId: Int?
     @State private var navigateToDemo = false
+    @State private var showingDeveloperInfo = false
     @FocusState private var isSearchFocused: Bool
     @State private var animateGradient = false
     @State private var showingThemeSheet = false
@@ -36,10 +37,25 @@ struct HomeView: View {
                 
                 ScrollView {
                     VStack(spacing: 40) {
-                        // Header with Theme Toggle
+                        // Header with Developer Info and Theme Toggle
                         HStack {
+                            // Developer Info Button (Top Left)
+                            Button(action: { showingDeveloperInfo = true }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color("FplSurface").opacity(0.8))
+                                        .frame(width: 44, height: 44)
+                                        .shadow(color: .black.opacity(0.1), radius: 5)
+                                    
+                                    Image(systemName: "info.circle.fill")
+                                        .foregroundColor(Color("FplPrimary"))
+                                        .font(.title3)
+                                }
+                            }
+                            
                             Spacer()
                             
+                            // Theme Toggle Button (Top Right)
                             Button(action: { showingThemeSheet = true }) {
                                 ZStack {
                                     Circle()
@@ -95,52 +111,53 @@ struct HomeView: View {
                         .padding(.top, 60)
                         
                         // Demo Section
-                           VStack(spacing: 20) {
-                               Text("Try the demo first!")
-                                   .font(.title3)
-                                   .fontWeight(.medium)
-                                   .foregroundColor(Color("FplTextPrimary"))
+                        VStack(spacing: 20) {
+                            Text("Try the demo first!")
+                                .font(.title3)
+                                .fontWeight(.medium)
+                                .foregroundColor(Color("FplTextPrimary"))
 
-                               Button(action: {
-                                   navigateToDemo = true
-                               }) {
-                                   HStack {
-                                       Image(systemName: "play.circle.fill")
-                                           .font(.title2)
+                            Button(action: {
+                                navigateToDemo = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "play.circle.fill")
+                                        .font(.title2)
 
-                                       Text("View Demo League")
-                                           .fontWeight(.semibold)
+                                    Text("View Demo League")
+                                        .fontWeight(.semibold)
 
-                                       Image(systemName: "sparkles")
-                                           .font(.caption)
-                                   }
-                                   .foregroundColor(.white)
-                                   .padding(.horizontal, 30)
-                                   .padding(.vertical, 15)
-                                   .background(
-                                       LinearGradient(
-                                           colors: [Color("FplAccent"), Color("FplAccent").opacity(0.8)],
-                                           startPoint: .leading,
-                                           endPoint: .trailing
-                                       )
-                                   )
-                                   .cornerRadius(30)
-                                   .shadow(color: Color("FplAccent").opacity(0.3), radius: 10, x: 0, y: 5)
-                               }
-                               .scaleEffect(1.05)
-                               .animation(.spring(response: 0.3), value: navigateToDemo)
-                           }
-                           .padding(.horizontal, 20)
+                                    Image(systemName: "sparkles")
+                                        .font(.caption)
+                                }
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 30)
+                                .padding(.vertical, 15)
+                                .background(
+                                    LinearGradient(
+                                        colors: [Color("FplAccent"), Color("FplAccent").opacity(0.8)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .cornerRadius(30)
+                                .shadow(color: Color("FplAccent").opacity(0.3), radius: 10, x: 0, y: 5)
+                            }
+                            .scaleEffect(1.05)
+                            .animation(.spring(response: 0.3), value: navigateToDemo)
+                        }
+                        .padding(.horizontal, 20)
 
-                           // Divider with "OR"
-                           HStack {
-                               VStack { Divider() }
-                               Text("OR")
-                                   .foregroundColor(Color("FplTextSecondary"))
-                                   .padding(.horizontal, 16)
-                               VStack { Divider() }
-                           }
-                           .padding(.horizontal, 40)
+                        // Divider with "OR"
+                        HStack {
+                            VStack { Divider() }
+                            Text("OR")
+                                .foregroundColor(Color("FplTextSecondary"))
+                                .padding(.horizontal, 16)
+                            VStack { Divider() }
+                        }
+                        .padding(.horizontal, 40)
+                        
                         // Search Section
                         VStack(spacing: 20) {
                             Text("Enter your league ID")
@@ -329,9 +346,9 @@ struct HomeView: View {
                 }
             }
             .navigationDestination(isPresented: $navigateToDemo) {
-                            DemoLeagueStatisticsView()
-                                .navigationBarHidden(true)
-                        }
+                DemoLeagueStatisticsView()
+                    .navigationBarHidden(true)
+            }
             .alert("Invalid League ID", isPresented: $showInvalidIdAlert) {
                 Button("OK") {
                     leagueId = ""
@@ -345,6 +362,9 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showingThemeSheet) {
                 ThemeSelectionSheet()
+            }
+            .sheet(isPresented: $showingDeveloperInfo) {
+                DeveloperInfoView()
             }
         }
     }
@@ -360,8 +380,4 @@ struct HomeView: View {
         selectedFavoriteLeagueId = nil
         navigateToLeague = true
     }
-}
-
-#Preview {
-    HomeView()
 }

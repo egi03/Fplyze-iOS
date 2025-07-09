@@ -274,3 +274,52 @@ struct GameweekData: Codable {
         case isNext = "is_next"
     }
 }
+
+extension NetworkError {
+    var userFriendlyMessage: String {
+        switch self {
+        case .invalidURL:
+            return "Invalid league ID format. Please check and try again."
+        case .noData:
+            return "No data received from FPL servers. Please try again."
+        case .decodingError(_):
+            return "Unable to process league data. The league might be private or unavailable."
+        case .serverError(let code):
+            switch code {
+            case 404:
+                return "League not found. Please verify the league ID is correct."
+            case 429:
+                return "Too many requests. Please wait a moment and try again."
+            case 500...599:
+                return "FPL servers are currently experiencing issues. Please try again later."
+            default:
+                return "Server error (\(code)). Please try again later."
+            }
+        case .networkUnavailable:
+            return "No internet connection. Please check your connection and try again."
+        case .timeout:
+            return "Request timed out. Please check your connection and try again."
+        case .leagueNotFound:
+            return "League not found. Please verify the league ID and that the league is public."
+        case .rateLimited:
+            return "Too many requests. Please wait 30 seconds and try again."
+        case .unknown(let error):
+            return "An unexpected error occurred: \(error.localizedDescription)"
+        }
+    }
+}
+
+func getErrorIcon(for error: NetworkError) -> String {
+    switch error {
+    case .networkUnavailable:
+        return "wifi.slash"
+    case .timeout:
+        return "clock.arrow.circlepath"
+    case .leagueNotFound, .serverError(404):
+        return "magnifyingglass"
+    case .rateLimited:
+        return "clock.fill"
+    default:
+        return "exclamationmark.triangle.fill"
+    }
+}

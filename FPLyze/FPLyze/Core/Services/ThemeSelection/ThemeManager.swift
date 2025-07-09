@@ -85,6 +85,33 @@ class ThemeManager: ObservableObject {
     func setTheme(_ mode: AppearanceMode) {
         currentMode = mode
     }
+    
+    func updateAppearance() {
+        DispatchQueue.main.async {
+            switch self.currentMode {
+            case .system:
+                // Follow system appearance
+                if let windowScene = UIApplication.shared.connectedScenes
+                    .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+                    
+                    windowScene.windows.forEach { window in
+                        window.overrideUserInterfaceStyle = .unspecified
+                    }
+                    
+                    // Update isDarkMode based on current system setting
+                    self.isDarkMode = windowScene.traitCollection.userInterfaceStyle == .dark
+                }
+                
+            case .light:
+                self.setAppearance(.light)
+                self.isDarkMode = false
+                
+            case .dark:
+                self.setAppearance(.dark)
+                self.isDarkMode = true
+            }
+        }
+    }
 }
 
 // MARK: - Theme Environment Key
