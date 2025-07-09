@@ -739,7 +739,7 @@ struct EnhancedChipUsageCard: View {
                 else if captainPoints >= 6 { return "Decent captain" }
                 else { return "Captain let you down" }
             } else {
-                return "Captain choice unknown"
+                return "Triple captain activated"
             }
         case .benchBoost:
             if let benchPoints = usage.benchBoost {

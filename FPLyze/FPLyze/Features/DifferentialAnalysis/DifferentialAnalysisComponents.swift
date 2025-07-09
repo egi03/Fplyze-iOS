@@ -251,17 +251,17 @@ struct DifferentialAnalysisCard: View {
                     Divider()
                     
                     VStack(spacing: 16) {
-                        // Differential Picks Section
+                        // Differential Picks Section Only
                         if !analysis.differentialPicks.isEmpty {
                             VStack(alignment: .leading, spacing: 12) {
                                 HStack {
-                                    Text("Top Differential Picks")
+                                    Text("Differential Picks")
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
                                     
                                     Spacer()
                                     
-                                    Text("Best \(min(5, analysis.differentialPicks.count)) picks")
+                                    Text("Best \(min(10, analysis.differentialPicks.count)) picks")
                                         .font(.caption)
                                         .foregroundColor(Color("FplTextSecondary"))
                                 }
@@ -269,15 +269,15 @@ struct DifferentialAnalysisCard: View {
                                 VStack(spacing: 8) {
                                     let sortedPicks = analysis.differentialPicks
                                         .sorted { $0.differentialScore > $1.differentialScore }
-                                        .prefix(5)
+                                        .prefix(10)
                                     
                                     ForEach(Array(sortedPicks.enumerated()), id: \.element.id) { index, pick in
                                         DifferentialPickRow(pick: pick, rank: index + 1)
                                     }
                                 }
                                 
-                                if analysis.differentialPicks.count > 5 {
-                                    Text("+ \(analysis.differentialPicks.count - 5) more differentials")
+                                if analysis.differentialPicks.count > 10 {
+                                    Text("+ \(analysis.differentialPicks.count - 10) more differentials")
                                         .font(.caption)
                                         .foregroundColor(Color("FplTextSecondary"))
                                         .padding(.top, 4)
@@ -285,28 +285,7 @@ struct DifferentialAnalysisCard: View {
                             }
                         }
                         
-                        // Missed Opportunities Section
-                        if !analysis.missedOpportunities.isEmpty {
-                            VStack(alignment: .leading, spacing: 12) {
-                                HStack {
-                                    Text("Missed Opportunities")
-                                        .font(.subheadline)
-                                        .fontWeight(.semibold)
-                                    
-                                    Spacer()
-                                    
-                                    Text("\(analysis.missedOpportunities.count) missed")
-                                        .font(.caption)
-                                        .foregroundColor(Color("FplTextSecondary"))
-                                }
-                                
-                                VStack(spacing: 8) {
-                                    ForEach(analysis.missedOpportunities.prefix(3)) { missed in
-                                        MissedOpportunityRow(missed: missed)
-                                    }
-                                }
-                            }
-                        }
+                        // REMOVED: Missed Opportunities Section
                     }
                     .padding()
                 }
