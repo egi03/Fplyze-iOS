@@ -4,7 +4,6 @@
 //
 //  Created by Eugen Sedlar on 21.06.2025..
 //
-import SwiftUI
 
 import SwiftUI
 
@@ -105,7 +104,7 @@ struct ChipsTab: View {
                     .padding(.horizontal)
                 }
                 .padding(.bottom, 8)
-                .background(Color.white)
+                .background(Color("FplSurface"))
                 .cornerRadius(15)
                 .shadow(color: .black.opacity(0.05), radius: 5, y: 5)
                 .padding(.horizontal)
@@ -288,7 +287,7 @@ struct ChipLeagueOverview: View {
             )
         }
         .padding()
-        .background(Color("FplSurface"))
+        .background(Color("FplCardBackground"))
         .cornerRadius(12)
     }
 }
@@ -410,7 +409,7 @@ struct EnhancedChipOverviewCard: View {
         .padding()
         .background(
             LinearGradient(
-                colors: [chipType.color.opacity(0.15), Color.white],
+                colors: [chipType.color.opacity(0.15), Color("FplSurface")],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -444,7 +443,7 @@ struct EnhancedStatBox: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.white)
+        .background(Color("FplCardBackground"))
         .cornerRadius(12)
         .shadow(color: color.opacity(0.2), radius: 5)
     }
@@ -503,7 +502,7 @@ struct ChipQualityDistribution: View {
                 QualityBar(label: "😔 Poor", count: distribution["Poor"] ?? 0, total: chipUsage.count, color: .red)
             }
             .padding()
-            .background(Color.white)
+            .background(Color("FplSurface"))
             .cornerRadius(15)
             .padding(.horizontal)
         }
@@ -530,7 +529,7 @@ struct QualityBar: View {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color("FplSurface"))
+                        .fill(Color("FplBackground"))
                         .frame(height: 20)
                     
                     RoundedRectangle(cornerRadius: 4)
@@ -629,11 +628,11 @@ struct EnhancedChipTimelineView: View {
                 }
             }
             .padding()
-            .background(Color("FplSurface"))
+            .background(Color("FplCardBackground"))
             .cornerRadius(10)
         }
         .padding()
-        .background(Color.white)
+        .background(Color("FplSurface"))
         .cornerRadius(15)
     }
 }
@@ -900,7 +899,7 @@ struct EnhancedChipUsageCard: View {
             .padding(.horizontal, 12)
             .background(
                 RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.white)
+                    .fill(Color("FplSurface"))
                     .shadow(color: effectiveness.color.opacity(0.15), radius: 5)
             )
         }

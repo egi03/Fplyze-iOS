@@ -115,7 +115,7 @@ struct EnhancedChartView: View {
             .chartYScale(domain: yAxisDomain)
             .frame(height: 300)
             .padding()
-            .background(Color.white)
+            .background(Color("FplSurface"))
             .cornerRadius(15)
             .shadow(color: .black.opacity(0.1), radius: 5)
             
@@ -277,7 +277,7 @@ struct MemberPerformanceCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 8)
         .padding(.horizontal, 10)
-        .background(Color.white)
+        .background(Color("FplCardBackground"))
         .cornerRadius(8)
     }
     

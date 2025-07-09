@@ -280,7 +280,7 @@ struct WhatIfSummaryCard: View {
             }
         }
         .padding()
-        .background(Color.white)
+        .background(Color("FplSurface"))
         .cornerRadius(15)
     }
     
