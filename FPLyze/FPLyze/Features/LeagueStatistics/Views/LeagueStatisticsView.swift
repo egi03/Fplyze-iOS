@@ -194,39 +194,16 @@ struct LeagueStatisticsView: View {
                 onTabSelected: viewModel.selectTab
             )
             
-            TabView(selection: $viewModel.selectedTab) {
-                RecordsTab(records: statistics.records)
-                    .tag(StatisticsTab.records)
-                
-                RankingsTab(statistics: statistics.managerStatistics)
-                    .tag(StatisticsTab.rankings)
-                
-                HeadToHeadTab(records: statistics.headToHeadStatistics)
-                    .tag(StatisticsTab.headToHead)
-                
-                ChipsTab(members: statistics.members)
-                    .tag(StatisticsTab.chips)
-                
-                TrendsTab(members: statistics.members)
-                    .tag(StatisticsTab.trends)
-                
-                PlayerAnalysisTab(
-                    missedAnalyses: statistics.missedPlayerAnalyses,
-                    underperformerAnalyses: statistics.underperformerAnalyses
-                )
-                .tag(StatisticsTab.playerAnalysis)
-                
-                DifferentialAnalysisTab(analyses: statistics.differentialAnalyses)
-                    .tag(StatisticsTab.differentials)
-                
-                WhatIfScenariosTab(scenarios: statistics.whatIfScenarios)
-                    .tag(StatisticsTab.whatIf)
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .animation(.easeInOut, value: viewModel.selectedTab)
-            .refreshable {
-                await viewModel.refresh(leagueId: leagueId)
-            }
+            CustomRefreshableTabView(
+                selectedTab: $viewModel.selectedTab,
+                statistics: statistics,
+                isRefreshing: viewModel.refreshing,
+                onRefresh: {
+                    Task {
+                        await viewModel.refresh(leagueId: leagueId)
+                    }
+                }
+            )
         }
     }
     
@@ -376,4 +353,204 @@ struct ShareSheet: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+// MARK: - Custom Refreshable TabView
+struct CustomRefreshableTabView: View {
+    @Binding var selectedTab: StatisticsTab
+    let statistics: LeagueStatisticsData
+    let isRefreshing: Bool
+    let onRefresh: () -> Void
+    
+    @State private var pullProgress: CGFloat = 0
+    @State private var isPulling: Bool = false
+    @State private var showRefreshHint: Bool = false
+    
+    // Customizable thresholds
+    private let refreshThreshold: CGFloat = 80.0  // Require 80pt pull instead of default ~50pt
+    private let maxPullDistance: CGFloat = 120.0
+    
+    var refreshProgress: CGFloat {
+        min(pullProgress / refreshThreshold, 1.0)
+    }
+    
+    var pullHintText: String {
+        if refreshProgress >= 1.0 {
+            return "Release to refresh"
+        } else if refreshProgress > 0.3 {
+            return "Pull further to refresh"
+        } else if refreshProgress > 0 {
+            return "Keep pulling..."
+        } else {
+            return ""
+        }
+    }
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // Custom refresh indicator
+                        refreshIndicator
+                        
+                        // Tab content
+                        tabContent
+                    }
+                    .background(
+                        GeometryReader { contentGeometry in
+                            Color.clear
+                                .onChangeCompat(of: contentGeometry.frame(in: .global).minY) {
+                                    handleScrollChange(
+                                        scrollY: contentGeometry.frame(in: .global).minY,
+                                        geometryHeight: geometry.size.height
+                                    )
+                                }
+                        }
+                    )
+                }
+                .coordinateSpace(name: "scroll")
+            }
+        }
+        .onChangeCompat(of: isRefreshing) {
+            if !isRefreshing {
+                withAnimation(.spring()) {
+                    pullProgress = 0
+                    isPulling = false
+                    showRefreshHint = false
+                }
+            }
+        }
+    }
+    
+    private var refreshIndicator: some View {
+        VStack(spacing: 8) {
+            if pullProgress > 0 || isRefreshing {
+                HStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .stroke(Color("FplDivider"), lineWidth: 3)
+                            .frame(width: 30, height: 30)
+                        
+                        Circle()
+                            .trim(from: 0, to: isRefreshing ? 1 : refreshProgress)
+                            .stroke(
+                                Color("FplPrimary"),
+                                style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                            )
+                            .frame(width: 30, height: 30)
+                            .rotationEffect(.degrees(-90))
+                            .rotationEffect(.degrees(isRefreshing ? 360 : 0))
+                            .animation(
+                                isRefreshing ?
+                                .linear(duration: 1.0).repeatForever(autoreverses: false) :
+                                .spring(),
+                                value: isRefreshing ? 360 : refreshProgress
+                            )
+                        
+                        if !isRefreshing && refreshProgress >= 1.0 {
+                            Image(systemName: "arrow.up")
+                                .font(.caption)
+                                .foregroundColor(Color("FplPrimary"))
+                                .scaleEffect(0.8)
+                        }
+                    }
+                    
+                    if showRefreshHint && !pullHintText.isEmpty {
+                        Text(pullHintText)
+                            .font(.caption)
+                            .foregroundColor(Color("FplTextSecondary"))
+                            .transition(.opacity.combined(with: .scale))
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(Color("FplBackground"))
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .frame(height: max(0, pullProgress * 0.6)) // Visual height based on pull
+        .clipped()
+    }
+    
+    private var tabContent: some View {
+        TabView(selection: $selectedTab) {
+            RecordsTab(records: statistics.records)
+                .tag(StatisticsTab.records)
+            
+            RankingsTab(statistics: statistics.managerStatistics)
+                .tag(StatisticsTab.rankings)
+            
+            HeadToHeadTab(records: statistics.headToHeadStatistics)
+                .tag(StatisticsTab.headToHead)
+            
+            ChipsTab(members: statistics.members)
+                .tag(StatisticsTab.chips)
+            
+            TrendsTab(members: statistics.members)
+                .tag(StatisticsTab.trends)
+            
+            PlayerAnalysisTab(
+                missedAnalyses: statistics.missedPlayerAnalyses,
+                underperformerAnalyses: statistics.underperformerAnalyses
+            )
+            .tag(StatisticsTab.playerAnalysis)
+            
+            DifferentialAnalysisTab(analyses: statistics.differentialAnalyses)
+                .tag(StatisticsTab.differentials)
+            
+            WhatIfScenariosTab(scenarios: statistics.whatIfScenarios)
+                .tag(StatisticsTab.whatIf)
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .animation(.easeInOut, value: selectedTab)
+        .frame(height: UIScreen.main.bounds.height - 200) // Give it a reasonable height
+    }
+    
+    private func handleScrollChange(scrollY: CGFloat, geometryHeight: CGFloat) {
+        // Only respond to pulls when at the top of the content
+        if scrollY > 0 && !isRefreshing {
+            let newProgress = min(scrollY, maxPullDistance)
+            
+            withAnimation(.interactiveSpring()) {
+                pullProgress = newProgress
+                isPulling = newProgress > 10
+                showRefreshHint = newProgress > 20
+            }
+            
+            // Trigger refresh when threshold is met and user releases
+            if newProgress >= refreshThreshold && !isPulling {
+                triggerRefresh()
+            }
+        } else if scrollY <= 0 && isPulling {
+            // User released the pull
+            if pullProgress >= refreshThreshold {
+                triggerRefresh()
+            } else {
+                // Reset if didn't pull far enough
+                withAnimation(.spring()) {
+                    pullProgress = 0
+                    isPulling = false
+                    showRefreshHint = false
+                }
+            }
+        }
+    }
+    
+    private func triggerRefresh() {
+        guard !isRefreshing else { return }
+        
+        withAnimation(.spring()) {
+            isPulling = false
+            showRefreshHint = false
+        }
+        
+        // Add haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+        
+        onRefresh()
+    }
 }

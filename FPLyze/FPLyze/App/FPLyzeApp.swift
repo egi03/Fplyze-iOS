@@ -9,20 +9,38 @@ import SwiftUI
 
 @main
 struct FPLyzeApp: App {
+    @StateObject private var themeManager = ThemeManager.shared
+    
     init() {
-        // Table and Collection View backgrounds
-        UITableView.appearance().backgroundColor = UIColor(Color("FplBackground"))
-        UICollectionView.appearance().backgroundColor = UIColor(Color("FplBackground"))
-        
-        // Navigation Bar styling
+        setupAppearance()
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            HomeView()
+                .environmentObject(themeManager)
+                .environment(\.themeManager, themeManager)
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    // Update theme when app becomes active (handles system changes)
+                    if themeManager.currentMode == .system {
+                        themeManager.updateAppearance()
+                    }
+                }
+        }
+    }
+    
+    private func setupAppearance() {
+        // Configure UI appearance that adapts to theme changes
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(Color("FplSurface"))
+        
+        // These will be overridden by theme manager, but set defaults
+        appearance.backgroundColor = UIColor.systemBackground
         appearance.titleTextAttributes = [
-            .foregroundColor: UIColor(Color("FplTextPrimary"))
+            .foregroundColor: UIColor.label
         ]
         appearance.largeTitleTextAttributes = [
-            .foregroundColor: UIColor(Color("FplTextPrimary"))
+            .foregroundColor: UIColor.label
         ]
         
         // Remove the bottom border
@@ -32,19 +50,56 @@ struct FPLyzeApp: App {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
         
-        // Tab Bar styling (if you add one later)
+        // Tab Bar styling (adapts automatically to dark mode)
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor(Color("FplSurface"))
+        tabBarAppearance.backgroundColor = UIColor.systemBackground
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        
+        // Table and Collection View backgrounds (adapts automatically)
+        UITableView.appearance().backgroundColor = UIColor.systemBackground
+        UICollectionView.appearance().backgroundColor = UIColor.systemBackground
+    }
+}
+
+// Extension to ThemeManager for app-specific functionality
+extension ThemeManager {
+    func updateAppearance() {
+        DispatchQueue.main.async {
+            switch self.currentMode {
+            case .system:
+                // Follow system appearance
+                if let windowScene = UIApplication.shared.connectedScenes
+                    .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+                    
+                    windowScene.windows.forEach { window in
+                        window.overrideUserInterfaceStyle = .unspecified
+                    }
+                    
+                    // Update isDarkMode based on current system setting
+                    self.isDarkMode = windowScene.traitCollection.userInterfaceStyle == .dark
+                }
+                
+            case .light:
+                self.setAppearance(.light)
+                self.isDarkMode = false
+                
+            case .dark:
+                self.setAppearance(.dark)
+                self.isDarkMode = true
+            }
+        }
     }
     
-    var body: some Scene {
-        WindowGroup {
-            HomeView()
+    private func setAppearance(_ style: UIUserInterfaceStyle) {
+        if let windowScene = UIApplication.shared.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+            
+            windowScene.windows.forEach { window in
+                window.overrideUserInterfaceStyle = style
+            }
         }
     }
 }
-// 788680
